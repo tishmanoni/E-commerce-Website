@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
+from django.conf import settings
 from .models import Product, myUser
 # Create your views here.
 
@@ -21,11 +22,20 @@ def contact(request, *args, **kwargs):
 def dashboard(request, *args, **kwargs):
     return HttpResponse("<h1>Welcome to your dashboard</h1>")
 
-def pictures(request):
+def picture(request):
     #return HttpResponse("<h4>It works</h4>")
-    if request.method == "POST":
-        p_file = request.FILES['my_pics']
-        fx = FileSystemStorage().save(p_file.name, p_file)
+    if request.method == 'POST' and request.FILES['my_pics']:
+        dnm = "if block"
+        myfile = request.FILES['my_pics']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        the_url_of_uploaded_file = fs.url(filename)
+        return render(request,"picture.html",{'the_url_of_uploaded_file': the_url_of_uploaded_file})
+    
+    else:
+        dnm = "else block"
+        return render(request,"picture.html",{"fnme":dnm})
+
         
     
-    return render (request, "pictures.html")
+    

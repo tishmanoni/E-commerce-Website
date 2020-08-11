@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from myonlineshop.views import home, about, contact, dashboard, pictures
+from myonlineshop.views import home, about, contact, dashboard, picture
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,7 +25,7 @@ urlpatterns = [
     path('about/', about),
     path('contact/', contact, name='contact'),
     path('dashboard/', dashboard, name='dashboard'),
-    path('pictures/', pictures, name='Show Picture'),
+    path('picture_x', picture, name='picture'),
    
 ]
 
