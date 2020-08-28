@@ -11,6 +11,10 @@ def home(request):
     usx = myUser.objects.all()
     return render(request, 'home.html', {'usx':usx})
 
+
+def index(request):
+    return render(request, 'index.html', {})
+
 def about(request, *args, **kwargs):
     #return HttpResponse("<h1>About Us</h1>")
 
