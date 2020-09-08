@@ -43,24 +43,39 @@
 		<div class="container-fluid">
 			<!-- logo -->
 			<div class="site-logo">
-				<img src="http://localhost/external-css/img/logo.png" alt="logo">
+				<img src="http://localhost/external-css/img/mylogo1.png" alt="logo" width="166px" height="25px" style="margin-top:6px;">
 			</div>
 			<!-- responsive -->
 			<div class="nav-switch">
 				<i class="fa fa-bars"></i>
 			</div>
 			<div class="header-right">
-				<a href="cart.html" class="card-bag"><img src="http://localhost/external-css/img/icons/bag.png" alt=""><span>2</span></a>
+				<a href="{% url "cart:cart_detail" %}" class="card-bag"><img src="http://localhost/external-css/img/icons/bag.png" alt="">
+					<span>
+					
+						{% with total_items=cart|length %}
+						{% if total_items > 0 %}
+							
+							
+							{{ total_items }} 
+							
+							
+						{% else %}
+							0
+						{% endif %}
+						{% endwith %}
+					</span>
+				</a>
 				<a href="#" class="search"><img src="http://localhost/external-css/img/icons/search.png" alt=""></a>
 			</div>
 			<!-- site menu -->
 			<ul class="main-menu">
-				<li><a href="index">Home</a></li>
+				<li><a href="/myonlineshop/index">Home</a></li>
 				<li><a href="#">Woman</a></li>
 				<li><a href="#">Man</a></li>
-				<li><a href="#">LookBook</a></li>
+				<li><a href="/myonlineshop/store">Store</a></li>
 				<li><a href="#">Blog</a></li>
-				<li><a href="contact.html">Contact</a></li>
+				<li><a href="contact">Contact</a></li>
 			</ul>
 		</div>
 	</header>
@@ -79,7 +94,7 @@
 			<div class="row">
 				<div class="col-lg-3 col-md-8 col-sm-12">
 					<div class="footer-widget about-widget">
-						<img src="http://localhost/external-css/img/logo.png" class="footer-logo" alt="">
+						<img src="http://localhost/external-css/img/mylogo2.png" class="footer-logo" width="166px" height="25px" style="padding-bottom:5px;" alt="">
 						<p>Donec vitae purus nunc. Morbi faucibus erat sit amet congue mattis. Nullam fringilla faucibus urna, id dapibus erat iaculis ut. Integer ac sem.</p>
 						<div class="cards">
 							<img src="http://localhost/external-css/img/cards/5.png" alt="">
@@ -148,7 +163,7 @@
 		<div class="container">
 			<p class="copyright">
 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved 
 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 </p>
 		</div>
