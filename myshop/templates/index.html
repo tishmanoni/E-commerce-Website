@@ -19,30 +19,34 @@
 
 
 	<!-- Hero section -->
-	<section class="hero-section set-bg" data-setbg="http://localhost/external-css/img/bg.jpg">
+	{% for product in products %}
+	{% if product.header_image  %}
+	<section class="hero-section set-bg" data-setbg="http://localhost/external-css/img/bg-2.jpg">
 		<div class="hero-slider owl-carousel">
 			<div class="hs-item">
-				<div class="hs-left"><img src="http://localhost/external-css/img/slider-img.png" alt=""></div>
+				<div class="hs-left"><img src="{{ product.image.url }} " alt=""></div>
 				<div class="hs-right">
 					<div class="hs-content">
-						<div class="price">from $19.90</div>
-						<h2><span>2018</span> <br>summer collection</h2>
-						<a href="" class="site-btn">Shop NOW!</a>
+						<div class="price">from ₦{{product.price}}</div>
+						<h2><span>2020</span> <br>{{product.description }}</h2>
+						<a href="{{product.get_absolute_url}}" class="btn btn-success btn-lg">SHOP NOW</a>
 					</div>	
 				</div>
 			</div>
 			<div class="hs-item">
-				<div class="hs-left"><img src="http://localhost/external-css/img/slider-img.png" alt=""></div>
+				<div class="hs-left"><img src="{{ product.image.url }} " alt=""></div>
 				<div class="hs-right">
 					<div class="hs-content">
-						<div class="price">from $19.90</div>
-						<h2><span>2018</span> <br>summer collection</h2>
-						<a href="" class="site-btn">Shop NOW!</a>
+						<div class="price">from ₦{{product.price}}</div>
+						<h2><span>2020</span> <br>{{product.description }}</h2>
+						<a href="{{product.get_absolute_url}}" class="btn btn-warning btn-lg">SHOP NOW</a>
 					</div>	
 				</div>
 			</div>
 		</div>
 	</section>
+	{% endif %}
+	{% endfor %}
 	<!-- Hero section end -->
 
 	
@@ -62,15 +66,16 @@
 					
 					<div class="intro-item">
 						<figure>
-							<a href="{{ product.get_absolute_url }}">
+							
 							<img src="{% if product.image %}{{ product.image.url }} {% else %}  http://localhost/external-css/img/no_image.png {% endif %}" alt="#">
-							</a>
+							
 						</figure>
 						<div class="product-info">
 							<a href="{{ product.get_absolute_url }} " >
 							<h5>{{product.name}} </h5>
 							</a>
-							<p>${{product.price}}</p>
+							<p>₦{{product.price}}</p>
+							<a href="{{product.get_absolute_url}}" class="site-btn btn-line">SHOP NOW</a>
 							
 							
 						</div>
@@ -132,7 +137,7 @@
 					<div class="product-item">
 						<figure>
 							<img src="{% if product.image %}{{ product.image.url }} {% else %}  http://localhost/external-css/img/no_image.png {% endif %}" alt="">
-							<div class="pi-meta">
+							{% comment %} <div class="pi-meta">
 								<div class="pi-m-left">
 									<img src="http://localhost/external-css/img/icons/eye.png" alt="">
 									<p>quick view</p>
@@ -141,12 +146,12 @@
 									<img src="http://localhost/external-css/img/icons/heart.png" alt="">
 									<p>save</p>
 								</div>
-							</div>
+							</div> {% endcomment %}
 						</figure>
 						<div class="product-info">
 							<h6>{{product.name}}</h6>
-							<p> ${{product.price}} </p>
-							<a href="#" class="site-btn btn-line">ADD TO CART</a>
+							<p> ₦{{product.price}} </p>
+							<a href="{{product.get_absolute_url}}" class="site-btn btn-line">SHOP NOW</a>
 						</div>
 					</div>
 				</div>
@@ -160,7 +165,7 @@
 						<figure>
 							<img src="{% if product.image %}{{ product.image.url }} {% else %}  http://localhost/external-css/img/no_image.png {% endif %}" alt="">
 							<div class="bache">NEW</div>
-							<div class="pi-meta">
+							{% comment %} <div class="pi-meta">
 								<div class="pi-m-left">
 									<img src="http://localhost/external-css/img/icons/eye.png" alt="">
 									<p>quick view</p>
@@ -169,12 +174,12 @@
 									<img src="http://localhost/external-css/img/icons/heart.png" alt="">
 									<p>save</p>
 								</div>
-							</div>
+							</div> {% endcomment %}
 						</figure>
 						<div class="product-info">
 							<h6>{{product.name}}</h6>
-							<p>${{product.price}}</p>
-							<a href="#" class="site-btn btn-line">ADD TO CART</a>
+							<p>₦{{product.price}}</p>
+							<a href="{{product.get_absolute_url}}" class="site-btn btn-line">SHOP NOW</a>
 						</div>
 					</div>
 				</div>

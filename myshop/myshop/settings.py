@@ -26,22 +26,34 @@ SECRET_KEY = 'sfuh5dy_eirgxyok=s+z#i86ee*(%pka^6xe^)@ypv(=er6cig'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mysite.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'myonlineshop.apps.MyonlineshopConfig',
+    'cart.apps.CartConfig',
+    'order.apps.OrderConfig',
+    'account.apps.AccountConfig',
+    'payment',
+    'coupons.apps.CouponsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cart.apps.CartConfig',
     'crispy_forms',
+    'django_countries',
+    'paystack',
+    'social_django',
+    'django_extensions',
+    
+    
+    
 ]
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -68,6 +80,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart',
+                # 'myonlineshop.context_processors.category',
+                
             ],
         },
     },
@@ -108,6 +122,20 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'account.authentication.EmailAuthBackend',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.google.GoogleOAuth2',
+
+
+
+]
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '399053652477-t9nrl6apjefq6cahehfc3m0evh7vop4s.apps.googleusercontent.com' # Google Consumer Key
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'RqOy8U5r1j735LDGMcRtm8nH' # Google Consumer Secret
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -127,9 +155,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'myshop/static')
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'myshop/static')
+# ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 
 MEDIA_URL = '/media/'
@@ -137,3 +166,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 CART_SESSION_ID = 'cart'
+
+
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.tishman.com.ng'  #Hosted on namecheap Ex: mail.pure.com
+EMAIL_USE_TLS = False
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'info@tishman.com.ng' 
+EMAIL_HOST_PASSWORD = '-5eugAp8K,2u'

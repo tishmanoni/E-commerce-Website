@@ -1,0 +1,57 @@
+{% extends "shop/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}
+  Checkout
+{% endblock %}
+{% block content %}
+
+<br>
+<br>
+
+    <div class="row justify-content-center " style="margin-top:120px">
+      <div class="col-lg-6 col-md-12 col-sm-12 col-12 mb-4">
+        <div class="card bg-light"> 
+          <div class="card-body">
+  
+            <h2 style="font-weight:bolder">Checkout</h2>
+            <!--<div class="order-info">-->
+              <div style="text-align:right">
+              <h3>Your order</h3>
+              <ul style="color:red; list-style:none;">
+                {% for item in cart %}
+                  <li>
+                    {{ item.quantity }} x {{ item.product.name }}
+                    <span>₦{{ item.total_price |floatformat:2  }}</span>
+                  </li>
+                {% endfor %}
+                 {% if cart.coupon %}
+                <li>
+                  "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off)
+                  <span class="neg">- ${{ cart.get_discount|floatformat:2 }}</span>
+                </li>
+              {% endif %}
+              </ul>
+              </div>
+              <button class="btn btn-warning">Total: ₦{{ cart.get_total_price_after_discount|floatformat:2 }}</button>
+              <br>
+              <br>
+            <!--</div>-->
+      
+    
+            <form method="post">
+              {{ form|crispy}}
+              <p><input type="submit" class="btn btn-success" value="Place order"></p>
+              {% csrf_token %}
+            </form>
+
+    </div>
+        </div>
+      </div>
+
+  
+    </div>
+
+  
+    
+  
+{% endblock %}

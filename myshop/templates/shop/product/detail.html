@@ -1,16 +1,17 @@
 {% extends 'shop/base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
 
 	
 
 
 	<!-- Page -->
-	<div class="page-area product-page spad">
+	<div class="page-area product-page spad" style="margin-top:120px">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6">
 					<figure>
-						<img class="product-big-img" src= "{% if product.image%}{{product.image.url}}{% else %} http://localhost/external-css/img/no_image.png {% endif %}" alt="">
+						<img class="product-big-img" src= "{% if product.image%}{{product.image.url}}{% else %} http://localhost/external-css/img/no_image.png {% endif %}" width="400px" height="500px"  alt="">
 					</figure>
 					<div class="product-thumbs">
 						<div class="product-thumbs-track">
@@ -18,6 +19,9 @@
 								
 							 
 							<div class="pt" data-imgbigurl="{% if product.image%}{{product.image.url}}{% else %} http://localhost/external-css/img/no_image.png {% endif %}"><img src="{% if product.image%}{{product.image.url}}{% else %} http://localhost/external-css/img/no_image.png {% endif %}" alt=""></div>
+							<div class="pt" data-imgbigurl="{% if product.slider1%}{{product.slider1.url}}{% else %} http://localhost/external-css/img/no_image.png {% endif %}"><img src="{% if product.slider1%}{{product.slider1.url}}{% else %} http://localhost/external-css/img/no_image.png {% endif %}" alt=""></div>
+							<div class="pt" data-imgbigurl="{% if product.slider2%}{{product.slider2.url}}{% else %} http://localhost/external-css/img/no_image.png {% endif %}"><img src="{% if product.slider2%}{{product.slider2.url}}{% else %} http://localhost/external-css/img/no_image.png {% endif %}" alt=""></div>
+							<div class="pt" data-imgbigurl="{% if product.slider3%}{{product.slider3.url}}{% else %} http://localhost/external-css/img/no_image.png {% endif %}"><img src="{% if product.slider3%}{{product.slider3.url}}{% else %} http://localhost/external-css/img/no_image.png {% endif %}" alt=""></div>
 							
 						</div>
 					</div>
@@ -26,29 +30,34 @@
 					<div class="product-content">
 						<h2>{{product.name}} </h2>
 						<div class="pc-meta">
-							<h4 class="price">${{product.price}}</h4>
-							<form action="{% url "cart:cart_add" product.id %}" method="post">
-							{{ cart_product_form }}
-							{% csrf_token %}
-							<input type="submit" value="Add to cart">
-							</form>
-                            <h3>
-                                <a href="{{ product.category.get_absolute_url}}">
+							<h4 class="price mb-2">₦{{product.price}}</h4>
+
+							
+								{% comment %} {% for message in messages %}
+								 <div class="alert alert-{{ message.tags }}  alert-dismissible fade-show" role="alert">
+										{{ message}} {% endcomment %}
+									<form action="{% url "cart:cart_add" product.id %}" method="post">
+									{{ form|crispy}}
+									{{ cart_product_form }}
+									{% csrf_token %}
+									<input type="submit" value="Add to cart" class="btn btn-warning mb-2">
+									</form>
+
+								 {% comment %} </div>
+								{% endfor %} {% endcomment %}
+
+							
+
+							<h4>Category</h4>
+                            <p>
+                                <a href="{{ product.category.get_absolute_url}}" class="text-warning">
                                     {{product.category}}
                                 </a>
-                            </h3>
-							<div class="review">
-								<div class="rating">
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star is-fade"></i>
-								</div>
-								<span>(2 reviews)</span>
-							</div>
+							</p>
+							
 						</div>
-						<p> {{product.description}} </p>
+						
+						
 						<div class="color-choose">
 							<span>Colors:</span>
 							<div class="cs-item">
@@ -83,7 +92,7 @@
 								<label for="xxl-size">XXL</label>
 							</div>
 						</div>
-						<a href="#" class="site-btn btn-line">ADD TO CART</a>
+						
 					</div>
 				</div>
 			</div>
@@ -98,7 +107,9 @@
 								<a class="nav-link" id="2-tab" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Additional information</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" id="3-tab" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Reviews (0)</a>
+								{% with comments.count as total_comments %}
+								<a class="nav-link" id="3-tab" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Reviews({{ total_comments}})</a>
+								{% endwith %}
 							</li>
 						</ul>
 						<div class="tab-content">
@@ -110,9 +121,55 @@
 								<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</p>
 							</div>
 							<div class="tab-pane fade" id="tab-3" role="tabpanel" aria-labelledby="tab-3">
+
+							{% with comments.count as total_comments %}
+								<h2>
+									{{ total_comments }} Review{{ total_comments|pluralize }}
+								</h2>
+								{% endwith %}
+
+							{% for comment in comments %}
+							
+							<div class="card">
+								<div class="card-body shadow-lg p-3  bg-white rounded">
+								<p class="text-danger">
+								Review  by {{ comment.name }}
+								{{ comment.created }}
+								</p>
+								<p class="text-danger"> {{ comment.body|linebreaks }} </p>
+							</div>	
+								
+							</div>
+							{% empty %}
+							<p>There are no comments yet.</p>
+							{% endfor %}
+
+							{% if new_comment %}
+							<h2>Your comment has been added.</h2>
+							{% else %}
+							<h2>Add a new comment</h2>
+							{% endif %}
+							{% if user.id is not None %}
+							<form method="post">
+								{{ comment_form|crispy }}
+
+								{% csrf_token %}
+
+								
+								<p><input type="submit" class="btn btn-warning" value="Add Review"></p>
+								{% else %}
+								You need to be logged in before you can comment
+								
+							</form>
+							{% endif %}
+							
+
+
+
 								
 							</div>
 						</div>
+						
 					</div>
 				</div>
 			</div>

@@ -24,6 +24,9 @@
 	<link rel="stylesheet" href="http://localhost/external-css/css/owl.carousel.css"/>
 	<link rel="stylesheet" href="http://localhost/external-css/css/style.css"/>
 	<link rel="stylesheet" href="http://localhost/external-css/css/animate.css"/>
+	<link rel="stylesheet" href="http://localhost/external-css/css/store-style.css">
+		<link rel="stylesheet" href="http://localhost/external-css/css/rating.css">
+	{% comment %} <link rel="stylesheet" href="http://localhost/external-css/css/message.css"> {% endcomment %}
 
 
 	<!--[if lt IE 9]>
@@ -39,11 +42,12 @@
 	</div>
 	
 	<!-- Header section -->
+	
 	<header class="header-section">
 		<div class="container-fluid">
 			<!-- logo -->
 			<div class="site-logo">
-				<img src="http://localhost/external-css/img/mylogo1.png" alt="logo" width="166px" height="25px" style="margin-top:6px;">
+				<img src="http://localhost/external-css/img/mylogo1.png" alt="logo" width="140px" style="margin-top:6px;">
 			</div>
 			<!-- responsive -->
 			<div class="nav-switch">
@@ -69,17 +73,41 @@
 				<a href="#" class="search"><img src="http://localhost/external-css/img/icons/search.png" alt=""></a>
 			</div>
 			<!-- site menu -->
+
 			<ul class="main-menu">
-				<li><a href="/myonlineshop/index">Home</a></li>
-				<li><a href="#">Woman</a></li>
-				<li><a href="#">Man</a></li>
-				<li><a href="/myonlineshop/store">Store</a></li>
-				<li><a href="#">Blog</a></li>
-				<li><a href="contact">Contact</a></li>
+				<li><a href="/home">Home</a></li>
+				<li><a href="/store">Store</a></li>
+				<li class="dropdown"><a href="javascript:void(0)" class="dropbtn">Categories</a>
+				 <div class="dropdown-content">
+					<a href="{% url "myonlineshop:product_list" %}" style="color:black">All</a>
+					{% for c in categories %}
+					<a href="{{ c.get_absolute_url }}" style="color:black">{{c.slug }}</a>
+					
+					{% endfor %}
+				</div>
+				</li>
+				<li><a href="/contact">Contact</a></li>
+				{% if request.user.is_authenticated %}
+				<li  class="dropdown"><a href="{% url "dashboard" %}"  class="dropbtn">Dashboard</a>
+				<div class="dropdown-content">
+					<a href="{% url "edit" %}" style="color:black">Edit Account</a>
+					<a href="{% url "orders:all_order" %}" style="color:black" class="text-center">Orders</a>
+					
+					
+				</div>
+				
+				</li>
+				<li><a href="{% url "logout" %}">Logout</a></li>
+				{% else %}
+				<li><a href="{% url "login" %}">Login/Signup</a></li>
+				{% endif %}
+
+				
 			</ul>
 		</div>
 	</header>
 	<!-- Header section end -->
+
 
 
     {% block content %}
@@ -161,7 +189,7 @@
 		<!-- Footer section -->
 	<footer class="footer-section">
 		<div class="container">
-			<p class="copyright">
+			<p class="copyright text-center">
 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved 
 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
@@ -180,6 +208,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="http://localhost/external-css/js/sly.min.js"></script>
 	<script src="http://localhost/external-css/js/jquery.nicescroll.min.js"></script>
 	<script src="http://localhost/external-css/js/main.js"></script>
+	<script src="http://localhost/external-css/js/myjs.js"></script>
 
 </body>
 </html>
