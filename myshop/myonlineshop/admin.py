@@ -1,7 +1,13 @@
 from django.contrib import admin
 from .models import Category, Product, Review
 
+
 # Register your models here.
+
+# class VariationInline(admin.TabularInline):
+#     model = Variation
+#     raw_id_fields = ['product']
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug']
@@ -9,10 +15,11 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'price', 'available', 'created', 'updated', 'new', 'best', 'sale', 'Featured', 'New_arrivals', 'Premium', 'recomended']
+    list_display = ['name', 'slug', 'image','price', 'available', 'created', 'updated', 'new', 'best', 'sale', 'Featured', 'New_arrivals', 'Premium', 'recomended']
     # list_filter = ['available', 'created', 'updated']
     list_editable = ['price', 'available', 'new', 'sale', 'best','Featured', 'New_arrivals', 'Premium', 'recomended']
     prepopulated_fields = {'slug': ('name',)}
+    # inlines = [VariationInline]
 
 
 @admin.register(Review)
@@ -20,5 +27,6 @@ class ReviewAdmin(admin.ModelAdmin):
     list_display = ('name', 'user','email', 'product', 'created', 'active')
     # list_filter = ('active', 'created', 'updated')
     search_fields = ('name', 'email', 'body')
+
 
 

@@ -13,6 +13,7 @@ from .models import Order, OrderItem
 from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import render_to_string
+from myonlineshop.models  import Product
 
 from django.urls import reverse
 import weasyprint
@@ -26,40 +27,54 @@ def order_created(order_id):
     """
     order = Order.objects.get(id=order_id)
     subject = f'Order nr. {order.id}'
-    message = f'Dear {order.first_name},\n\n' \
+    message = f'Dear {order.user.first_name},\n\n' \
               f'You have successfully placed an order.' \
               f'Your order ID is {order.id}.'
     mail_sent = send_mail(subject,
                           message,
                           'info@tishman.com.ng',
-                          [order.email])
+                          [order.user.email])
     return mail_sent
 
 @login_required
 def order_create(request):
     cart = Cart(request)
+    my_product = Product()
+
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)
-        
-        
+
+ 
 
         if form.is_valid():
-            order = form.save(commit=False)
+            data = Order() #create relation to model
+            data.address = form.cleaned_data['address']
+            data.postal_code = form.cleaned_data['postal_code']
+            data.city = form.cleaned_data['city']
+            data.country = form.cleaned_data['country']
+            current_user = request.user
+            data.user_id = current_user.id
+            order = data
+            # order = form.save(commit=False)
+            
             if cart.coupon:
                 order.coupon = cart.coupon
                 order.discount = cart.coupon.discount
                 
             order.save()
+
+            
             for item in cart:
                 OrderItem.objects.create(user=request.user,
                                             order=order,
                                             product=item['product'],
                                             price=item['price'],
-                                            quantity=item['quantity'])
+                                            quantity=item['quantity'],
+                                            size_cloth=item['size_cloth'])
             # clear the cart
             cart.clear()
             # launch asynchronous task
-            order_created(order.id)
+            #order_created(order.id)
             return render(request, 'orders/order/created.html', locals())
             # set the order in the session
             # request.session['order_id'] = order.id
@@ -80,8 +95,8 @@ def order_create(request):
 
 
 @staff_member_required
-def admin_order_detail(request, order_id):
-    order = get_object_or_404(Order, id=order_id)
+def admin_order_detail(request, order_id, user_id):
+    order = get_object_or_404(Order, id=order_id, user_id=user_id)
     return render(request,
                   'admin/orders/order/detail.html',
                   {'order': order})
@@ -113,6 +128,4 @@ def my_order(request, quantity, order_id, user_id):
 def all_orders(request):
     orders = OrderItem.objects.all()
     orders_filter = orders.filter(user=request.user)
-    
-
     return render(request, 'orders/order/allorders.html', {'orders':orders, 'filter':orders_filter} )

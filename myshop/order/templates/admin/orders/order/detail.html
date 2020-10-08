@@ -25,11 +25,11 @@
   </tr>
   <tr>
     <th>Customer</th>
-    <td>{{ order.first_name }} {{ order.last_name }}</td>
+    <td>{{ order.user.first_name }} {{ order.user.last_name }}</td>
   </tr>
   <tr>
     <th>E-mail</th>
-    <td><a href="mailto:{{ order.email }}">{{ order.email }}</a></td>
+    <td><a href="mailto:{{ order.user.email }}">{{ order.user.email }}</a></td>
   </tr>
   <tr>
     <th>Address</th>
@@ -61,7 +61,7 @@
     <tbody>
       {% for item in order.items.all %}
         <tr class="row{% cycle "1" "2" %}">
-          <td>{{ item.product.name }}</td>
+          <td>{{ item.product.name }} {{item.size_cloth}}</td>
           <td class="num">${{ item.price }}</td>
           <td class="num">{{ item.quantity }}</td>
           <td class="num">${{ item.get_cost }}</td>

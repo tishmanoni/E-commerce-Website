@@ -20,10 +20,12 @@
               <ul style="color:red; list-style:none;">
                 {% for item in cart %}
                   <li>
-                    {{ item.quantity }} x {{ item.product.name }}
+                    {{ item.quantity }} x {{ item.product.name }} {{item.size_cloth}}
                     <span>₦{{ item.total_price |floatformat:2  }}</span>
+                    
                   </li>
                 {% endfor %}
+                <p>Shipping fee: ₦1200</p>
                  {% if cart.coupon %}
                 <li>
                   "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off)
@@ -32,7 +34,7 @@
               {% endif %}
               </ul>
               </div>
-              <button class="btn btn-warning">Total: ₦{{ cart.get_total_price_after_discount|floatformat:2 }}</button>
+              <button class="btn btn-warning">Total: ₦{{ cart.get_total_price_after_discount_shipping|floatformat:2 }}</button>
               <br>
               <br>
             <!--</div>-->

@@ -4,6 +4,8 @@ from django.urls import reverse
 from django.conf import settings
 from django import forms
 from django.contrib.auth.models import User
+from taggit.managers import TaggableManager
+
 
 
 # Create your models here.
@@ -47,10 +49,15 @@ class Product (models.Model):
     new = models.BooleanField(default=False)
     best = models.BooleanField(default=False)
     header_image = models.BooleanField(default=False)
-    
+
     sale = models.BooleanField(default=False, verbose_name='pending payments')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    tags = TaggableManager()
+    size_cloth = models.BooleanField(default=True)
+    size_trouser = models.BooleanField(default=True)
+    
+
     
     class Meta:
         ordering = ('name',)
@@ -83,8 +90,8 @@ class Review(models.Model):
         return f'Comment by {self.name} on {self.product}'
 
     def __str__(self):
-        return f'Profile for user {self.name}'
+        return f'Comment by user \n {self.body}'
 
-    
+
 
     

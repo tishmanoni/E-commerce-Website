@@ -133,7 +133,7 @@
 
 				{% for product in products %}
 				{% if product.best  %}
-				<div class="mix col-lg-3 col-md-6 best">
+				<div class="mix col-lg-3 col-md-6 best ">
 					<div class="product-item">
 						<figure>
 							<img src="{% if product.image %}{{ product.image.url }} {% else %}  http://localhost/external-css/img/no_image.png {% endif %}" alt="">
@@ -151,7 +151,7 @@
 						<div class="product-info">
 							<h6>{{product.name}}</h6>
 							<p> ₦{{product.price}} </p>
-							<a href="{{product.get_absolute_url}}" class="site-btn btn-line">SHOP NOW</a>
+							<a href="{{product.get_absolute_url}}" class="site-btn btn-line hvr-float">SHOP NOW</a>
 						</div>
 					</div>
 				</div>
@@ -179,7 +179,7 @@
 						<div class="product-info">
 							<h6>{{product.name}}</h6>
 							<p>₦{{product.price}}</p>
-							<a href="{{product.get_absolute_url}}" class="site-btn btn-line">SHOP NOW</a>
+							<a href="{{product.get_absolute_url}}" class="site-btn btn-line hvr-float">SHOP NOW</a>
 						</div>
 					</div>
 				</div>

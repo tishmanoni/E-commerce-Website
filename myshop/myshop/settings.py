@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'paystack',
     'social_django',
     'django_extensions',
+    'taggit',
+    'django.contrib.postgres',
     
     
     
@@ -180,3 +182,9 @@ EMAIL_USE_TLS = False
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'info@tishman.com.ng' 
 EMAIL_HOST_PASSWORD = '-5eugAp8K,2u'
+
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 1
+

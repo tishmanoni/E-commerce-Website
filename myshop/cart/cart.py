@@ -17,7 +17,7 @@ class Cart(object):
             cart = self.session[settings.CART_SESSION_ID] = {}
         self.cart = cart
 
-    def add(self, product, quantity=1, size='small', override_quantity=False):
+    def add(self, product, quantity=1, size_cloth='s', size_trouser='',  override_quantity=True):
         """
         Add a product to the cart or update its quantity.
         """
@@ -26,10 +26,26 @@ class Cart(object):
             self.cart[product_id] = {'quantity': 0,
                                      'price': str(product.price)}
 
+        
+
+        if size_cloth:
+            self.cart[product_id]['size_cloth'] = size_cloth
+
+
+        # if size_trouser:
+        #     self.cart[product_id]['size_trouser'] = size_trouser
+
+
+
+
         if override_quantity:
-            self.cart[product_id]['quantity'] = quantity
+            self.cart[product_id]['quantity'] =quantity
         else:
             self.cart[product_id]['quantity'] += quantity
+            
+
+       
+ 
 
         self.save()
     def save(self):
@@ -92,3 +108,6 @@ class Cart(object):
         return Decimal(0)
     def get_total_price_after_discount(self):
         return self.get_total_price() - self.get_discount()
+
+    def get_total_price_after_discount_shipping(self):
+        return self.get_total_price() - self.get_discount() + 1200

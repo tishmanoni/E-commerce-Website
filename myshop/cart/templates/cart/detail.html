@@ -61,7 +61,7 @@
                 <img src="{% if product.image %}{{ product.image.url }} {% else %}  http://localhost/external-css/img/no_image.png {% endif %}" class="img-thumbnail" width="100px" height="100px">
               </a>
             </td>
-            <td>{{ product.name }}</td>
+            <td>{{ product.name }} {{item.size_cloth}} </td>
             
             <td>
                 <form action="{% url "cart:cart_add" product.id %}" method="post">

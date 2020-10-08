@@ -49,7 +49,7 @@ def export_to_csv(modeladmin, request, queryset):
 export_to_csv.short_description = 'Export to CSV'
 
 def order_detail(obj):
-    url = reverse('orders:admin_order_detail', args=[obj.id])
+    url = reverse('orders:admin_order_detail', args=[obj.id, obj.user_id])
     return mark_safe(f'<a href="{url}">View</a>')
 
 def order_pdf(obj):
@@ -60,7 +60,7 @@ order_pdf.short_description = 'Invoice'
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user','first_name', 'last_name', 'email',
+    list_display = ['id', 'user', 
                     'address', 'postal_code', 'city', 'paid',
                     'created', 'updated', order_detail, order_pdf]
     # list_filter = ['paid', 'created', 'updated']

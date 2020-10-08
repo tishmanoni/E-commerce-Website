@@ -8,14 +8,14 @@
           <div class="card bg-light shadow-lg"> 
             <div class="card-body">
                             
-            <form id="paymentForm">
+            <form id="paymentForm" method="post">
             <div class="form-group">
                 <label for="email">Email Address</label>
                 <input type="email"class="form-control" id="email-address" required />
             </div>
             <div class="form-group">
                 <label for="amount">Amount</label>
-                <input type="tel" class="form-control" id="amount" required />
+                <input type="tel" class="form-control" id="amount" value="{{total_cost}}" required disabled />
             </div>
             <div class="form-group">
                 <label for="first-name">First Name</label>

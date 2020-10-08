@@ -11,3 +11,21 @@ class EmailPostForm(forms.Form):
     name= forms.CharField(max_length=25)
     email= forms.EmailField()
     Message = forms.CharField(required=False, widget=forms.Textarea)
+
+class SearchForm(forms.Form):
+    query = forms.CharField(label='Search')
+
+SIZE_CHOICES = (
+
+        ('S', 'Small'),
+        ('L', 'Large')
+    )
+
+
+
+
+class VariationForm(forms.Form):
+    size = forms.TypedChoiceField(required=True, choices=SIZE_CHOICES , widget=forms.RadioSelect, label="Size:")
+  
+
+

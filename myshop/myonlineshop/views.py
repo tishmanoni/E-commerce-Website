@@ -6,9 +6,14 @@ from .models import Category, Product, Review
 from cart.forms import CartAddProductForm
 from django.contrib.auth.decorators import login_required
 
-from .forms import ReviewForm
+from .forms import ReviewForm, SearchForm
+from django.contrib.postgres.search import SearchVector
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+
+
+from django.core.paginator import Paginator, EmptyPage,\
+                                  PageNotAnInteger
 
 
 # Create your views here.
@@ -22,7 +27,8 @@ def home(request):
 
 def index(request):
     products = Product.objects.all()
-    return render(request, 'index.html', {'products':products})
+    categories = Category.objects.all()
+    return render(request, 'index.html', {'products':products, 'categories':categories})
 
 
 # product.html
@@ -31,7 +37,8 @@ def index(request):
 # cart
 
 def contact(request):
-    return render(request, 'shop/product/contact.html', {})
+    categories = Category.objects.all()
+    return render(request, 'shop/product/contact.html', {'categories':categories})
 
 
 def cart(request):
@@ -64,11 +71,34 @@ def picture(request):
 def product_list (request, category_slug=None):
     category = None
     categories = Category.objects.all()
-    products = Product.objects.filter(available=True)
+    my_products = Product.objects.filter(available=True)
+    # my_products = Product.objects.all()
+    paginator = Paginator(my_products, 6) # 3 posts in each page
+    page = request.GET.get('page')
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+         # If page is not an integer deliver the first page
+        products = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range deliver last page of results
+        products = paginator.page(paginator.num_pages)
+    
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
-        products = products.filter(category=category)
-    return render(request, 'shop/product/store.html', {'category':category, 'categories':categories, 'products': products})      
+        my_products = my_products.filter(category=category)
+        paginator = Paginator(my_products, 3) # 3 posts in each page
+        page = request.GET.get('page')
+        try:
+            products = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer deliver the first page
+            products = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range deliver last page of results
+            products = paginator.page(paginator.num_pages)
+        
+    return render(request, 'shop/product/store.html', {'category':category, 'categories':categories, 'my_products': my_products, 'page':page, 'products':products})      
 
 
 def product_detail(request, id, slug):
@@ -77,22 +107,36 @@ def product_detail(request, id, slug):
                                 slug=slug,
                                 available=True)
     cart_product_form = CartAddProductForm()
+    
+    
+  
     comments = product.review.filter(active=True)
     new_comment = None
+    user = request.user
     if request.method == 'POST':
         # A comment was posted
         comment_form = ReviewForm(data=request.POST)
         if comment_form.is_valid():
+            data = Review()
+            data.name = comment_form.cleaned_data['name']
+            data.email = comment_form.cleaned_data['email']
+            data.body = comment_form.cleaned_data['body']
+            product = product
+            data.product = product
+            current_user = request.user
+            data.user_id = current_user.id
             # Create Comment object but don't save to database yet
             new_comment = comment_form.save(commit=False)
             # Assign the current post to the comment
             new_comment.product = product
+            new_comment = data
             # Save the comment to the database
             new_comment.save()
+            messages.success(request, "Your review has been sent. Thank you")
     else:
         comment_form = ReviewForm()
    
-    return render(request,'shop/product/detail.html', {'product': product, 'cart_product_form': cart_product_form, 'comments': comments,'new_comment': new_comment, 'comment_form': comment_form})  
+    return render(request,'shop/product/detail.html', {'product': product, 'cart_product_form': cart_product_form, 'comments': comments,'new_comment': new_comment, 'comment_form': comment_form,  })  
 
 # def addcomment(request, id):
 #     url = request.META.get('HTTP_REFERER') #get last url
@@ -114,7 +158,17 @@ def product_detail(request, id, slug):
 #             return HttpResponseRedirect(url)
 #     return HttpResponseRedirect(url)
 
-    
+
+def post_search(request):
+    form = SearchForm()
+    query = None
+    results = []
+    categories = Category.objects.all()
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            results = Product.objects.annotate(search=SearchVector('name', 'price'),   ).filter(search=query)
+    return render(request,  'shop/product/search.html', {'form': form, 'query': query,'results': results, 'categories':categories})
    
-    
     

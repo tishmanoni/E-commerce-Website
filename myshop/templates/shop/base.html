@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX" crossorigin="anonymous">
 </head>
 <body>
@@ -25,7 +25,8 @@
 	<link rel="stylesheet" href="http://localhost/external-css/css/style.css"/>
 	<link rel="stylesheet" href="http://localhost/external-css/css/animate.css"/>
 	<link rel="stylesheet" href="http://localhost/external-css/css/store-style.css">
-		<link rel="stylesheet" href="http://localhost/external-css/css/rating.css">
+	<link rel="stylesheet" href="http://localhost/external-css/css/rating.css">
+	<link rel="stylesheet" href="http://localhost/external-css/css/hover.css" rel="stylesheet" media="all">>
 	{% comment %} <link rel="stylesheet" href="http://localhost/external-css/css/message.css"> {% endcomment %}
 
 
@@ -70,7 +71,7 @@
 						{% endwith %}
 					</span>
 				</a>
-				<a href="#" class="search"><img src="http://localhost/external-css/img/icons/search.png" alt=""></a>
+				<a href="/search" class="search"><img src="http://localhost/external-css/img/icons/search.png" alt=""></a>
 			</div>
 			<!-- site menu -->
 
@@ -91,7 +92,7 @@
 				<li  class="dropdown"><a href="{% url "dashboard" %}"  class="dropbtn">Dashboard</a>
 				<div class="dropdown-content">
 					<a href="{% url "edit" %}" style="color:black">Edit Account</a>
-					<a href="{% url "orders:all_order" %}" style="color:black" class="text-center">Orders</a>
+					<a href="{% url "orders:all_order" %}" style="color:black">Orders</a>
 					
 					
 				</div>
@@ -112,6 +113,9 @@
 
     {% block content %}
 
+
+
+
     {% endblock %}
 
 
@@ -123,7 +127,7 @@
 				<div class="col-lg-3 col-md-8 col-sm-12">
 					<div class="footer-widget about-widget">
 						<img src="http://localhost/external-css/img/mylogo2.png" class="footer-logo" width="166px" height="25px" style="padding-bottom:5px;" alt="">
-						<p>Donec vitae purus nunc. Morbi faucibus erat sit amet congue mattis. Nullam fringilla faucibus urna, id dapibus erat iaculis ut. Integer ac sem.</p>
+						{% comment %} <p>Donec vitae purus nunc. Morbi faucibus erat sit amet congue mattis. Nullam fringilla faucibus urna, id dapibus erat iaculis ut. Integer ac sem.</p> {% endcomment %}
 						<div class="cards">
 							<img src="http://localhost/external-css/img/cards/5.png" alt="">
 							<img src="http://localhost/external-css/img/cards/4.png" alt="">
@@ -133,19 +137,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-2 col-md-4 col-sm-6">
-					<div class="footer-widget">
-						<h6 class="fw-title">usefull Links</h6>
-						<ul>
-							<li><a href="#">Partners</a></li>
-							<li><a href="#">Bloggers</a></li>
-							<li><a href="#">Support</a></li>
-							<li><a href="#">Terms of Use</a></li>
-							<li><a href="#">Press</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-2 col-md-4 col-sm-6">
+				
+				<div class="col-lg-3 col-md-4 col-sm-6">
 					<div class="footer-widget">
 						<h6 class="fw-title">Sitemap</h6>
 						<ul>
@@ -157,7 +150,7 @@
 						</ul>
 					</div>
 				</div>
-				<div class="col-lg-2 col-md-4 col-sm-6">
+				<div class="col-lg-3 col-md-4 col-sm-6">
 					<div class="footer-widget">
 						<h6 class="fw-title">Shipping & returns</h6>
 						<ul>
@@ -170,14 +163,14 @@
 						</ul>
 					</div>
 				</div>
-				<div class="col-lg-2 col-md-4 col-sm-6">
+				<div class="col-lg-3 col-md-4 col-sm-6">
 					<div class="footer-widget">
 						<h6 class="fw-title">Contact</h6>
 						<div class="text-box">
-							<p>Your Company Ltd </p>
-							<p>1481 Creekside Lane  Avila Beach, CA 93424, </p>
-							<p>+53 345 7953 32453</p>
-							<p>office@youremail.com</p>
+							<p>Tishman Ltd </p>
+							<p>5, arowolo street beach rd Agric, Ikorodu. </p>
+							<p>+234 8141 635443</p>
+							<p>info@tishman.com.ng</p>
 						</div>
 					</div>
 				</div>

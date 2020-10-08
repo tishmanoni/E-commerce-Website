@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title></title>
+    {% block title %}Store{% endblock %}
     <link rel="stylesheet" href="http://localhost/external-css/css/navbar.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     
@@ -48,26 +48,46 @@
            <div class="row">
             {% for product in products %}
             <div class="col-sm-6 col-md-6 col-xl-4 col-6 mt-3 my-product">
-            <a href="{{ product.get_absolute_url }}">
-                 <img src="{% if product.image %}{{ product.image.url }} {% else %}  http://localhost/external-css/img/no_image.png {% endif %}" class="card-img-top" alt="...">
-            </a>   
-                <p class="text-center mt-3">{{ product.name }}</p>
-                <h3 class="text-center mb-3">${{ product.price }}</h3>
-                <p class="text-center">
-                <a href="{{ product.get_absolute_url }} " class="site-btn btn-line">SHOP NOW</a>
-                </p>
+              <a href="{{ product.get_absolute_url }}">
+                  <img src="{% if product.image %}{{ product.image.url }} {% else %}  http://localhost/external-css/img/no_image.png {% endif %}" class="card-img-top" alt="...">
+              </a>   
+                  <p class="text-center mt-3">{{ product.name }}</p>
+                  <h3 class="text-center mb-3">₦{{ product.price }}</h3>
+                  <p class="text-center">
+                  <a href="{{ product.get_absolute_url }} " class="site-btn btn-line hvr-float-shadow">SHOP NOW</a>
+                  </p>
+                  
 
             </div>
             {% endfor %}
-
+            
             
 
           </div>
+          
       </div>
     </div>
+    <div class="row">
+
+      <div class="col-5">
+
+      </div>
+
+      <div class="col-7 mt-5">
+     
+        {% include "pagination.html" with page=products %}
+     
+      </div>
+
+    </div>
+
+
   </div>
 
+
+  
+
                 
-            {% endblock  %}
+         {% endblock  %}
   </body>
 </html>

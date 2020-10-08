@@ -2,8 +2,9 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-	
 
+
+								
 
 	<!-- Page -->
 	<div class="page-area product-page spad" style="margin-top:120px">
@@ -32,19 +33,33 @@
 						<div class="pc-meta">
 							<h4 class="price mb-2">₦{{product.price}}</h4>
 
+							{% if messages %}
+									{% for message in messages %}
+										<div class="alert alert-{{ message.tags }}  alert-dismissible fade-show" role="alert">
+										{{ message}}
+										<button type="button" class="close" data-dismiss="alert">&times;</button>
+									
+									</div>
+								{% endfor %}
 							
-								{% comment %} {% for message in messages %}
-								 <div class="alert alert-{{ message.tags }}  alert-dismissible fade-show" role="alert">
-										{{ message}} {% endcomment %}
+							{% endif %}
+
+							
+							
 									<form action="{% url "cart:cart_add" product.id %}" method="post">
-									{{ form|crispy}}
-									{{ cart_product_form }}
+									
+									{{ cart_product_form|crispy }}<br>
+
+								
+			
+									
 									{% csrf_token %}
+									
+
 									<input type="submit" value="Add to cart" class="btn btn-warning mb-2">
 									</form>
 
-								 {% comment %} </div>
-								{% endfor %} {% endcomment %}
+
 
 							
 
@@ -57,41 +72,8 @@
 							
 						</div>
 						
-						
-						<div class="color-choose">
-							<span>Colors:</span>
-							<div class="cs-item">
-								<input type="radio" name="cs" id="black-color" checked>
-								<label class="cs-black" for="black-color"></label>
-							</div>
-							<div class="cs-item">
-								<input type="radio" name="cs" id="blue-color">
-								<label class="cs-blue" for="blue-color"></label>
-							</div>
-							<div class="cs-item">
-								<input type="radio" name="cs" id="yollow-color">
-								<label class="cs-yollow" for="yollow-color"></label>
-							</div>
-							<div class="cs-item">
-								<input type="radio" name="cs" id="orange-color">
-								<label class="cs-orange" for="orange-color"></label>
-							</div>
-						</div>
-						<div class="size-choose">
-							<span>Size:</span>
-							<div class="sc-item">
-								<input type="radio" name="sc" id="l-size" checked>
-								<label for="l-size">L</label>
-							</div>
-							<div class="sc-item">
-								<input type="radio" name="sc" id="xl-size">
-								<label for="xl-size">XL</label>
-							</div>
-							<div class="sc-item">
-								<input type="radio" name="sc" id="xxl-size">
-								<label for="xxl-size">XXL</label>
-							</div>
-						</div>
+					
+					
 						
 					</div>
 				</div>
@@ -121,7 +103,16 @@
 								<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</p>
 							</div>
 							<div class="tab-pane fade" id="tab-3" role="tabpanel" aria-labelledby="tab-3">
-
+							  {% if messages %}
+									{% for message in messages %}
+										<div class="alert alert-{{ message.tags }}  alert-dismissible fade-show" role="alert">
+										{{ message}}
+										<button type="button" class="close" data-dismiss="alert">&times;</button>
+									
+									</div>
+								{% endfor %}
+							
+							{% endif %}
 							{% with comments.count as total_comments %}
 								<h2>
 									{{ total_comments }} Review{{ total_comments|pluralize }}
@@ -270,6 +261,7 @@
 			</div>
 		</div>
 	</div> 
+
 
 	<!-- Page end -->
     {% endblock  %}
