@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('currencies/', include('currencies.urls')),
     path('cart/', include('cart.urls', namespace='cart')),
     path('orders/', include('order.urls', namespace='order')),
     path('account/', include('account.urls')),
@@ -28,11 +29,8 @@ urlpatterns = [
     path('social-auth/', include('social_django.urls', namespace='social')),
     path('coupons/', include('coupons.urls', namespace='coupons')),
     path('', include('myonlineshop.urls', namespace='myonlineshop')),
-    
 
     # path('about/', about),
-
-    
    
    
 ]

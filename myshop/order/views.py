@@ -73,13 +73,14 @@ def order_create(request):
                                             size_cloth=item['size_cloth'])
             # clear the cart
             cart.clear()
+            
             # launch asynchronous task
-            #order_created(order.id)
-            return render(request, 'orders/order/created.html', locals())
-            # set the order in the session
-            # request.session['order_id'] = order.id
+            order_created(order.id)
+            # return render(request, 'orders/order/created.html', locals())
+            #set the order in the session
+            request.session['order_id'] = order.id
             # redirect for payment
-            # return redirect(reverse('payment:pay'))
+            return redirect(reverse('payment:pay'))
         else:
             order_created.delay(order.id)
             return render(request,
@@ -97,6 +98,8 @@ def order_create(request):
 @staff_member_required
 def admin_order_detail(request, order_id, user_id):
     order = get_object_or_404(Order, id=order_id, user_id=user_id)
+    if not request.session.has_key('currency'):
+        request.session['currency'] = settings.DEFAULT_CURRENCY
     return render(request,
                   'admin/orders/order/detail.html',
                   {'order': order})
@@ -106,6 +109,7 @@ def admin_order_detail(request, order_id, user_id):
 @staff_member_required
 def admin_order_pdf(request, order_id):
     order = get_object_or_404(Order, id=order_id)
+    
     html = render_to_string('orders/order/pdf.html',
                             {'order': order})
     response = HttpResponse(content_type='application/pdf')
@@ -116,6 +120,7 @@ def admin_order_pdf(request, order_id):
     return response
 
 
+@login_required
 def my_order(request, quantity, order_id, user_id):
     # myorder = get_object_or_404(Order, id=id, user_id=user_id )
     order_detail = get_object_or_404(OrderItem, quantity=quantity ,order_id=order_id,  user_id=request.user )

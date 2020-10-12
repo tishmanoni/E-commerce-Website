@@ -1,4 +1,6 @@
 {% extends 'shop/base.html' %}
+{% load currency %}
+{% currency_context %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -52,7 +54,7 @@
                   <img src="{% if product.image %}{{ product.image.url }} {% else %}  http://localhost/external-css/img/no_image.png {% endif %}" class="card-img-top" alt="...">
               </a>   
                   <p class="text-center mt-3">{{ product.name }}</p>
-                  <h3 class="text-center mb-3">₦{{ product.price }}</h3>
+                  <h3 class="text-center mb-3">{{ product.price|currency:request.session.currency }} {{ request.session.currency }}</h3>
                   <p class="text-center">
                   <a href="{{ product.get_absolute_url }} " class="site-btn btn-line hvr-float-shadow">SHOP NOW</a>
                   </p>
@@ -76,6 +78,7 @@
       <div class="col-7 mt-5">
      
         {% include "pagination.html" with page=products %}
+        
      
       </div>
 

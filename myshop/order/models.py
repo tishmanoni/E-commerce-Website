@@ -13,13 +13,14 @@ from django.core.validators import MinValueValidator, \
 from coupons.models import Coupon
 
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
    
     
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
-    address = models.CharField(max_length=250)
-    postal_code = models.CharField(max_length=20)
-    city = models.CharField(max_length=100)
+    address = models.CharField(_('address'), max_length=250)
+    postal_code = models.CharField(_('postal_code'),max_length=20)
+    city = models.CharField(_('city'),max_length=100)
     country = CountryField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -32,7 +33,7 @@ class Order(models.Model):
     discount = models.IntegerField(default=0,
                                   validators=[MinValueValidator(0),
                                       MaxValueValidator(100)])
-    shipping = models.DecimalField(default=1000, decimal_places=2, )
+    # shipping = models.DecimalField(default=1000, decimal_places=2, )
     class Meta:
         ordering = ('-created',)
     def __str__(self):

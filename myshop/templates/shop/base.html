@@ -1,3 +1,5 @@
+{% load currency %}
+{% currency_context %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,6 +30,7 @@
 	<link rel="stylesheet" href="http://localhost/external-css/css/rating.css">
 	<link rel="stylesheet" href="http://localhost/external-css/css/hover.css" rel="stylesheet" media="all">>
 	{% comment %} <link rel="stylesheet" href="http://localhost/external-css/css/message.css"> {% endcomment %}
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
 	<!--[if lt IE 9]>
@@ -48,7 +51,11 @@
 		<div class="container-fluid">
 			<!-- logo -->
 			<div class="site-logo">
+				<!-- <a href="/home">
 				<img src="http://localhost/external-css/img/mylogo1.png" alt="logo" width="140px" style="margin-top:6px;">
+				</a> -->
+
+				<!-- <a href="">TISHMAN</a> -->
 			</div>
 			<!-- responsive -->
 			<div class="nav-switch">
@@ -72,6 +79,35 @@
 					</span>
 				</a>
 				<a href="/search" class="search"><img src="http://localhost/external-css/img/icons/search.png" alt=""></a>
+				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+					CURRENCIES
+				  </button>
+
+				  <!-- <form id="currency_switcher" method="POST" action="{% url 'myonlineshop:selectcurrency' %}">
+					{% csrf_token %}
+					<select name="currency" onchange="submit()" class="custom-select custom-select-md">
+						{% for curr in CURRENCIES %}
+							<option value="{{ curr.code }}"
+									{% ifequal curr.code request.session.currency %}selected="selected"{% endifequal %}>
+									{{ curr.code }} {{ curr.symbol }} 
+							</option>
+						{% endfor %}
+					</select>
+	
+					<noscript>
+						<input type="submit" value="Set" />
+					</noscript>
+	
+				</form>  -->
+
+				 
+
+				
+				
+				
+				
+        		
+        
 			</div>
 			<!-- site menu -->
 
@@ -103,6 +139,11 @@
 				<li><a href="{% url "login" %}">Login/Signup</a></li>
 				{% endif %}
 
+				<li>
+
+					
+				</li>
+
 				
 			</ul>
 		</div>
@@ -110,12 +151,11 @@
 	<!-- Header section end -->
 
 
+	
+
+
 
     {% block content %}
-
-
-
-
     {% endblock %}
 
 
@@ -126,7 +166,8 @@
 			<div class="row">
 				<div class="col-lg-3 col-md-8 col-sm-12">
 					<div class="footer-widget about-widget">
-						<img src="http://localhost/external-css/img/mylogo2.png" class="footer-logo" width="166px" height="25px" style="padding-bottom:5px;" alt="">
+						
+						{% comment %} <img src="http://localhost/external-css/img/mylogo2.png" class="footer-logo" width="166px" height="25px" style="padding-bottom:5px;" alt=""> {% endcomment %}
 						{% comment %} <p>Donec vitae purus nunc. Morbi faucibus erat sit amet congue mattis. Nullam fringilla faucibus urna, id dapibus erat iaculis ut. Integer ac sem.</p> {% endcomment %}
 						<div class="cards">
 							<img src="http://localhost/external-css/img/cards/5.png" alt="">
@@ -189,19 +230,65 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 </p>
 		</div>
 
-		  	</footer>
+ </footer>
+	
+<!-- modal -->
+<div class="modal fade" id="myModal">
+<div class="modal-dialog modal-sm">
+	<div class="modal-content">
+	
+	<!-- Modal Header -->
+	<div class="modal-header">
+		<h4 class="modal-title">CHANGE CURRENCY</h4>
+		<button type="button" class="close" data-dismiss="modal">&times;</button>
+	</div>
+	
+	<!-- Modal body -->
+		<div class="modal-body">
+			<form id="currency_switcher" method="POST" action="{% url 'myonlineshop:selectcurrency' %}">
+				{% csrf_token %}
+				<select name="currency" onchange="submit()" class="custom-select custom-select-md">
+					{% for curr in CURRENCIES %}
+						<option value="{{ curr.code }}"
+								{% ifequal curr.code request.session.currency %}selected="selected"{% endifequal %}>
+							{{ curr.symbol }} {{ curr.name }}
+						</option>
+					{% endfor %}
+				</select>
+
+				<noscript>
+					<input type="submit" value="Set" />
+				</noscript>
+
+			</form> 
+			</div>
+
+	<div class="modal-footer">
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	</div>
+	
+	</div>
+</div>
+</div>
+
+	
 	<!-- Footer section end -->
 
 
-	<!--====== Javascripts & Jquery ======-->
-	<script src="http://localhost/external-css/js/jquery-3.2.1.min.js"></script>
-	<script src="http://localhost/external-css/js/bootstrap.min.js"></script>
-	<script src="http://localhost/external-css/js/owl.carousel.min.js"></script>
-	<script src="http://localhost/external-css/js/mixitup.min.js"></script>
-	<script src="http://localhost/external-css/js/sly.min.js"></script>
-	<script src="http://localhost/external-css/js/jquery.nicescroll.min.js"></script>
-	<script src="http://localhost/external-css/js/main.js"></script>
-	<script src="http://localhost/external-css/js/myjs.js"></script>
+<!--====== Javascripts & Jquery ======-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
+<script src="http://localhost/external-css/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="http://localhost/external-css/js/owl.carousel.min.js"></script>
+<script src="http://localhost/external-css/js/mixitup.min.js"></script>
+<script src="http://localhost/external-css/js/sly.min.js"></script>
+<script src="http://localhost/external-css/js/jquery.nicescroll.min.js"></script>
+<script src="http://localhost/external-css/js/main.js"></script>
+<script src="http://localhost/external-css/js/myjs.js"></script>
 
 </body>
 </html>

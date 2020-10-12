@@ -1,4 +1,5 @@
 {% extends "admin/base_site.html" %}
+{% load currency %}
 {% block title %}
   Order {{ order.id }} {{ block.super }}
 {% endblock %}
@@ -6,6 +7,27 @@
   <div class="breadcrumbs">
     <a href="{% url "admin:index" %}">Home</a> &rsaquo;
     <a href="{% url "admin:order_order_changelist" %}">Orders</a>
+    &rsaquo;
+    
+    
+      <form id="currency_switcher" method="POST" action="{% url 'myonlineshop:selectcurrency' %}">
+					{% csrf_token %}
+					<select name="currency" onchange="submit()" class="custom-select custom-select-md">
+						{% for curr in CURRENCIES %}
+							<option value="{{ curr.code }}"
+									{% ifequal curr.code request.session.currency %}selected="selected"{% endifequal %}>
+									{{ curr.code }} {{ curr.symbol }} 
+							</option>
+						{% endfor %}
+					</select>
+	
+					<noscript>
+						<input type="submit" value="Set" />
+					</noscript>
+	
+				</form>  
+    
+   
     &rsaquo;
     <a href="{% url "admin:order_order_change" order.id %}">Order {{ order.id }}</a>
     &rsaquo; Detail
@@ -40,7 +62,7 @@
   </tr>
   <tr>
     <th>Total amount</th>
-    <td>${{ order.get_total_cost }}</td>
+    <td>{{ order.get_total_cost|currency:request.session.currency }} {{ request.session.currency }} </td>
   </tr>
   <tr>
     <th>Status</th>
@@ -62,14 +84,14 @@
       {% for item in order.items.all %}
         <tr class="row{% cycle "1" "2" %}">
           <td>{{ item.product.name }} {{item.size_cloth}}</td>
-          <td class="num">${{ item.price }}</td>
-          <td class="num">{{ item.quantity }}</td>
-          <td class="num">${{ item.get_cost }}</td>
+          <td class="num">{{ item.price|currency:request.session.currency }} {{ request.session.currency }}</td>
+          <td class="num">{{ item.quantity}}</td>
+          <td class="num">{{ item.get_cost|currency:request.session.currency }} {{ request.session.currency  }}</td>
         </tr>
       {% endfor %}
       <tr class="total">
         <td colspan="3">Total</td>
-        <td class="num">${{ order.get_total_cost }}</td>
+        <td class="num">{{ order.get_total_cost|currency:request.session.currency }} {{ request.session.currency  }}</td>
       </tr>
     </tbody>
   </table>

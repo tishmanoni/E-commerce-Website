@@ -1,5 +1,6 @@
 {% extends 'shop/base.html' %}
 {% load crispy_forms_tags %}
+{% load currency %}
 <!DOCTYPE html>
 <html lang="zxx">
 <head>
@@ -46,6 +47,7 @@
       <tr>
         <th>Image</th>
         <th>Product</th>
+        <th>Size</th>
         <th>Quantity</th>
         <th>Remove</th>
         <th>Unit price</th>
@@ -61,7 +63,8 @@
                 <img src="{% if product.image %}{{ product.image.url }} {% else %}  http://localhost/external-css/img/no_image.png {% endif %}" class="img-thumbnail" width="100px" height="100px">
               </a>
             </td>
-            <td>{{ product.name }} {{item.size_cloth}} </td>
+            <td>{{ product.name }}  </td>
+            <td>{{item.size_cloth}}</td>
             
             <td>
                 <form action="{% url "cart:cart_add" product.id %}" method="post">
@@ -78,8 +81,9 @@
                 {% csrf_token %}
               </form>
             </td>
-            <td class="num">₦{{ item.price }}</td>
-            <td class="num">₦{{ item.total_price }}</td>
+            
+            <td class="num">{{ item.price|currency:request.session.currency }} {{ request.session.currency }}</td>
+            <td class="num">{{ item.total_price|currency:request.session.currency }} {{ request.session.currency }} </td>
           </tr>
         {% endwith %}
       {% endfor %}
@@ -87,7 +91,7 @@
   <tr class="subtotal">
     <td>Subtotal</td>
     <td colspan="4"></td>
-    <td class="num">${{ cart.get_total_price|floatformat:2 }}</td>
+    <td class="num">{{ cart.get_total_price|currency:request.session.currency }} {{ request.session.currency }}</td>
   </tr>
   <tr>
     <td>
@@ -96,39 +100,85 @@
     </td>
     <td colspan="4"></td>
     <td class="num neg">
-      - ${{ cart.get_discount|floatformat:2 }}
-    </td>
-  </tr>
-{% endif %}
-<tr class="total">
-  <td>Total</td>
-  <td colspan="4"></td>
-  <td class="num">
-    ${{ cart.get_total_price_after_discount|floatformat:2 }}
-  </td>
-</tr>
-    </tbody>
-  </table>
+      - {{ cart.get_discount|currency:request.session.currency }} {{ request.session.currency }} }}
+      </td>
+    </tr>
+    {% endif %}
+    <tr class="total">
+      <td>Total</td>
+      <td colspan="5"></td>
+      <td class="num">
+        {{ cart.get_total_price_after_discount|currency:request.session.currency }} {{ request.session.currency }}
+      </td>
+    </tr>
+      </tbody>
+    </table>
 
-  <p>Apply a coupon:</p>
-  <form action="{% url "coupons:apply" %}" method="post">
-    {{ coupon_apply_form|crispy }}
-    <input type="submit" value="Apply" class="btn btn-primary">
-    {% csrf_token %}
-  </form>
-
-
-    <p class="text-right">
-    <a href="{% url "myonlineshop:product_list" %}" class="btn btn-success">Continue shopping</a>
-    <a href="{% url "orders:order_create" %}" class="btn btn-primary">
-    Checkout
-    </a>
-  
+    <p>Apply a coupon:</p>
+    <form action="{% url "coupons:apply" %}" method="post">
+      {{ coupon_apply_form|crispy }}
+      <input type="submit" value="Apply" class="btn btn-primary">
+      {% csrf_token %}
+    </form>
 
 
-  </p>
+      <p class="text-right">
+      <a href="{% url "myonlineshop:product_list" %}" class="btn btn-success">Continue shopping</a>
+      {% if cart  %}
+      <a href="{% url "orders:order_create" %}" class="btn btn-primary">
+      Checkout
+      </a>
+      {% endif %}
+    
+
+
+    </p>
+    </div>
   </div>
+
+
+  <div class="container">
+
+    {% if recommended_products %}
+			<div class="text-center rp-title">
+				<h3>People who bought this also bought</h3>
+			</div>
+		
+		<div class="row">
+			{% for p in recommended_products %}
+				<div class="col-lg-3">
+					<div class="product-item">
+						<figure>
+							<a href="{{ p.get_absolute_url }}">
+								<img src="{{ p.image.url }}">
+							</a>
+							<div class="pi-meta">
+								<div class="pi-m-left">
+									<img src="http://localhost/external-css/img/icons/eye.png" alt="">
+									<p>quick view</p>
+								</div>
+								<div class="pi-m-right">
+									<img src="http://localhost/external-css/img/icons/heart.png" alt="">
+									<p>save</p>
+								</div>
+							</div>
+						</figure>
+						<div class="product-info">
+							<h6><a href="{{ p.get_absolute_url }}">{{ p.name }}</a></h6>
+							<p>{{p.price}} </p>
+							<a href="{{ p.get_absolute_url }} " class="site-btn btn-line hvr-float-shadow">SHOP NOW</a>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+		
+			</div>
+		
+		{% endif %}
+		</div>
+
   </div>
+
 		
 		
     {% endblock  %}

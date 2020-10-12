@@ -39,7 +39,9 @@ from order.models import OrderItem, Order
 @login_required
 def dashboard(request):
     messages.success(request, 'Succesfully Logged in')
-    return render(request,'account/dashboard.html',{'section': 'dashboard'})
+    current_user = request.user  # Access User Session information
+    profile = Profile.objects.get(user_id=current_user.id)
+    return render(request,'account/dashboard.html',{'section': 'dashboard', 'profile':profile})
 
 
 
@@ -51,7 +53,7 @@ def register(request):
             new_user = user_form.save(commit=False)
             # Set the chosen password
             new_user.set_password(
-                user_form.cleaned_data['password'])
+            user_form.cleaned_data['password'])
             # Save the User object
             new_user.save()
             # Create the user profile

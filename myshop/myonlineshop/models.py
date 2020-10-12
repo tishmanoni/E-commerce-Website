@@ -45,8 +45,9 @@ class Product (models.Model):
     Featured= models.BooleanField(default=False)
     Premium = models.BooleanField(default=False)
     New_arrivals = models.BooleanField(default=False)
-    recomended = models.BooleanField(default=False)
-    new = models.BooleanField(default=False)
+    
+    super_offer = models.BooleanField(default=False)
+    super_offer2 = models.BooleanField(default=False)
     best = models.BooleanField(default=False)
     header_image = models.BooleanField(default=False)
 

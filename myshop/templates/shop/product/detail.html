@@ -1,6 +1,8 @@
 {% extends 'shop/base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
+{% load currency %}
+{% currency_context %}
 
 
 
@@ -31,7 +33,7 @@
 					<div class="product-content">
 						<h2>{{product.name}} </h2>
 						<div class="pc-meta">
-							<h4 class="price mb-2">₦{{product.price}}</h4>
+							<h4 class="price mb-2">{{ product.price|currency:request.session.currency }} {{ request.session.currency }}</h4>
 
 							{% if messages %}
 									{% for message in messages %}
@@ -164,14 +166,20 @@
 					</div>
 				</div>
 			</div>
+
+		{% if recommended_products %}
 			<div class="text-center rp-title">
-				<h5>Related products</h5>
+				<h3>People who bought this also bought</h3>
 			</div>
-			<div class="row">
+		
+		<div class="row">
+			{% for p in recommended_products %}
 				<div class="col-lg-3">
 					<div class="product-item">
 						<figure>
-							<img src="http://localhost/external-css/img/products/1.jpg" alt="">
+							<a href="{{ p.get_absolute_url }}">
+								<img src="{{ p.image.url }}">
+							</a>
 							<div class="pi-meta">
 								<div class="pi-m-left">
 									<img src="http://localhost/external-css/img/icons/eye.png" alt="">
@@ -184,81 +192,17 @@
 							</div>
 						</figure>
 						<div class="product-info">
-							<h6>Long red Shirt</h6>
-							<p>$39.90</p>
-							<a href="#" class="site-btn btn-line">ADD TO CART</a>
+							<h6><a href="{{ p.get_absolute_url }}">{{ p.name }}</a></h6>
+							<p>{{ product.price|currency:request.session.currency }} {{ request.session.currency }} </p>
+							<a href="{{ p.get_absolute_url }} " class="site-btn btn-line hvr-float-shadow">SHOP NOW</a>
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-3">
-					<div class="product-item">
-						<figure>
-							<img src="http://localhost/external-css/img/products/2.jpg" alt="">
-							<div class="bache">NEW</div>
-							<div class="pi-meta">
-								<div class="pi-m-left">
-									<img src="http://localhost/external-css/img/icons/eye.png" alt="">
-									<p>quick view</p>
-								</div>
-								<div class="pi-m-right">
-									<img src="http://localhost/external-css/img/icons/heart.png" alt="">
-									<p>save</p>
-								</div>
-							</div>
-						</figure>
-						<div class="product-info">
-							<h6>Hype grey shirt</h6>
-							<p>$19.50</p>
-							<a href="#" class="site-btn btn-line">ADD TO CART</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3">
-					<div class="product-item">
-						<figure>
-							<img src="http://localhost/external-css/img/products/3.jpg" alt="">
-							<div class="pi-meta">
-								<div class="pi-m-left">
-									<img src="http://localhost/external-css/img/icons/eye.png" alt="">
-									<p>quick view</p>
-								</div>
-								<div class="pi-m-right">
-									<img src="http://localhost/external-css/img/icons/heart.png" alt="">
-									<p>save</p>
-								</div>
-							</div>
-						</figure>
-						<div class="product-info">
-							<h6>long sleeve jacket</h6>
-							<p>$59.90</p>
-							<a href="#" class="site-btn btn-line">ADD TO CART</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3">
-					<div class="product-item">
-						<figure>
-							<img src="http://localhost/external-css/img/products/4.jpg" alt="">
-							<div class="bache sale">SALE</div>
-							<div class="pi-meta">
-								<div class="pi-m-left">
-									<img src="http://localhost/external-css/img/icons/eye.png" alt="">
-									<p>quick view</p>
-								</div>
-								<div class="pi-m-right">
-									<img src="http://localhost/external-css/img/icons/heart.png" alt="">
-									<p>save</p>
-								</div>
-							</div>
-						</figure>
-						<div class="product-info">
-							<h6>Denim men shirt</h6>
-							<p>$32.20 <span>RRP 64.40</span></p>
-							<a href="#" class="site-btn btn-line">ADD TO CART</a>
-						</div>
-					</div>
-				</div>
+				{% endfor %}
+		
 			</div>
+		
+		{% endif %}
 		</div>
 	</div> 
 

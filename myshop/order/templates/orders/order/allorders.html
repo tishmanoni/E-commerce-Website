@@ -1,5 +1,6 @@
 {% extends 'shop/base.html' %}
 {% load crispy_forms_tags %}
+{% load currency %}
 
 
 {% block content %}
@@ -23,7 +24,7 @@
         </div>
         <div id="collapseOne" class="collapse show" data-parent="#accordion">
           <div class="card-body">
-            <p>Price: ₦{{order.price}}</p>
+            <p>Price: {{order.price|currency:request.session.currency }} {{ request.session.currency }}</p>
             <p>Quantity: {{order.quantity}}</p>
             <p>Size: {{order.size_cloth}}</p>
           </div>

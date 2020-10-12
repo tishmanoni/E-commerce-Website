@@ -28,7 +28,18 @@ def home(request):
 def index(request):
     products = Product.objects.all()
     categories = Category.objects.all()
-    return render(request, 'index.html', {'products':products, 'categories':categories})
+    if not request.session.has_key('currency'):
+        request.session['currency'] = settings.DEFAULT_CURRENCY
+
+   
+    
+    return render(request, 'index.html', {'products':products, 'categories':categories, 'settings':settings})
+
+def selectcurrency(request):
+    lasturl = request.META.get('HTTP_REFERER')
+    if request.method == 'POST':  # check post
+        request.session['currency'] = request.POST['currency']
+    return HttpResponseRedirect(lasturl)
 
 
 # product.html
@@ -100,13 +111,16 @@ def product_list (request, category_slug=None):
         
     return render(request, 'shop/product/store.html', {'category':category, 'categories':categories, 'my_products': my_products, 'page':page, 'products':products})      
 
-
+from .recommender import Recommender
 def product_detail(request, id, slug):
+    
     product = get_object_or_404(Product,
                                 id=id,
                                 slug=slug,
                                 available=True)
     cart_product_form = CartAddProductForm()
+    r = Recommender()
+    recommended_products = r.suggest_products_for([product], 4)
     
     
   
@@ -136,7 +150,7 @@ def product_detail(request, id, slug):
     else:
         comment_form = ReviewForm()
    
-    return render(request,'shop/product/detail.html', {'product': product, 'cart_product_form': cart_product_form, 'comments': comments,'new_comment': new_comment, 'comment_form': comment_form,  })  
+    return render(request,'shop/product/detail.html', {'product': product, 'cart_product_form': cart_product_form, 'comments': comments,'new_comment': new_comment, 'comment_form': comment_form, 'recommended_products': recommended_products })  
 
 # def addcomment(request, id):
 #     url = request.META.get('HTTP_REFERER') #get last url

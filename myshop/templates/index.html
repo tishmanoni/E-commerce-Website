@@ -1,4 +1,5 @@
 {% extends 'shop/base.html' %}
+{% load currency %}
 <!DOCTYPE html>
 <html lang="zxx">
 <head>
@@ -27,7 +28,7 @@
 				<div class="hs-left"><img src="{{ product.image.url }} " alt=""></div>
 				<div class="hs-right">
 					<div class="hs-content">
-						<div class="price">from ₦{{product.price}}</div>
+						<div class="price">from {{request.session.symbol}} {{product.price|currency:request.session.currency }} {{ request.session.currency }}</div>
 						<h2><span>2020</span> <br>{{product.description }}</h2>
 						<a href="{{product.get_absolute_url}}" class="btn btn-success btn-lg">SHOP NOW</a>
 					</div>	
@@ -37,7 +38,8 @@
 				<div class="hs-left"><img src="{{ product.image.url }} " alt=""></div>
 				<div class="hs-right">
 					<div class="hs-content">
-						<div class="price">from ₦{{product.price}}</div>
+
+						<div class="price">from {{product.price|currency:request.session.currency }} {{ request.session.currency }}</div>
 						<h2><span>2020</span> <br>{{product.description }}</h2>
 						<a href="{{product.get_absolute_url}}" class="btn btn-warning btn-lg">SHOP NOW</a>
 					</div>	
@@ -74,7 +76,7 @@
 							<a href="{{ product.get_absolute_url }} " >
 							<h5>{{product.name}} </h5>
 							</a>
-							<p>₦{{product.price}}</p>
+							<p>{{product.price|currency:request.session.currency }} {{ request.session.currency }}</p>
 							<a href="{{product.get_absolute_url}}" class="site-btn btn-line">SHOP NOW</a>
 							
 							
@@ -103,18 +105,28 @@
 	<div class="featured-section spad">
 		<div class="container">
 			<div class="row">
+			
 				<div class="col-md-6">
 					<div class="featured-item">
 						<img src="http://localhost/external-css/img/featured/featured-1.jpg" alt="">
 						<a href="#" class="site-btn">see more</a>
 					</div>
 				</div>
+			
+
+				{% for product in products   %}
+			{% if product.super_offer %}
 				<div class="col-md-6">
 					<div class="featured-item mb-0">
-						<img src="http://localhost/external-css/img/featured/featured-2.jpg" alt="">
-						<a href="#" class="site-btn">see more</a>
+						<img src="{% if product.image %}{{ product.image.url }} {% else %}  http://localhost/external-css/img/no_image.png {% endif %}" alt="">
+						
+						<a href="{{ product.category.get_absolute_url}}" class="site-btn">see more</a>
+						
+						
 					</div>
 				</div>
+				{% endif %}
+			{% endfor %}
 			</div>
 		</div>
 	</div>
@@ -150,7 +162,7 @@
 						</figure>
 						<div class="product-info">
 							<h6>{{product.name}}</h6>
-							<p> ₦{{product.price}} </p>
+							<p> {{product.price|currency:request.session.currency }} {{ request.session.currency }} </p>
 							<a href="{{product.get_absolute_url}}" class="site-btn btn-line hvr-float">SHOP NOW</a>
 						</div>
 					</div>
@@ -178,7 +190,7 @@
 						</figure>
 						<div class="product-info">
 							<h6>{{product.name}}</h6>
-							<p>₦{{product.price}}</p>
+							<p>{{product.price|currency:request.session.currency }} {{ request.session.currency }}</p>
 							<a href="{{product.get_absolute_url}}" class="site-btn btn-line hvr-float">SHOP NOW</a>
 						</div>
 					</div>
@@ -197,6 +209,7 @@
 
 
 	<!-- Blog section -->	
+	
 	<section class="blog-section spad">
 		<div class="container">
 			<div class="row">

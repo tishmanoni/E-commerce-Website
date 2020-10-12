@@ -4,6 +4,7 @@ from django_countries.fields import CountryField
 # Create your models here.
 from django.db import models
 from django.conf import settings
+from django.utils.safestring import mark_safe
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE)
@@ -17,6 +18,10 @@ class Profile(models.Model):
     
     def __str__(self):
         return f'Profile for user {self.user.username}'
+
+    def image_tag(self):
+        return mark_safe('<img src="{}" height="50"/>'.format(self.photo.url))
+    image_tag.short_description = 'Image'
 
     
     

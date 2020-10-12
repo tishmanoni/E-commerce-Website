@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import django
+
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -51,10 +54,18 @@ INSTALLED_APPS = [
     'django_extensions',
     'taggit',
     'django.contrib.postgres',
+    'currencies',
     
     
     
 ]
+
+if django.VERSION < (1, 7):
+    INSTALLED_APPS += (
+        'south',
+    )
+
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
@@ -65,6 +76,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'myshop.urls'
@@ -82,6 +94,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart',
+                'currencies.context_processors.currencies',
                 # 'myonlineshop.context_processors.category',
                 
             ],
@@ -144,6 +157,23 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'RqOy8U5r1j735LDGMcRtm8nH' # Google Consumer 
 
 LANGUAGE_CODE = 'en-us'
 
+LANGUAGES = (
+    ('en', 'English'),
+    ('es', 'Spanish'),
+)
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale/'),
+)
+
+from django.utils.translation import gettext_lazy as _
+LANGUAGES = (
+    ('en', _('English')),
+    ('es', _('Spanish')),
+)
+
+
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -187,4 +217,9 @@ EMAIL_HOST_PASSWORD = '-5eugAp8K,2u'
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 REDIS_DB = 1
+
+OPENEXCHANGERATES_APP_ID = "aaa7cca31d214c8fb05faa97ecc52297"
+
+
+DEFAULT_CURRENCY = 'NGN'
 

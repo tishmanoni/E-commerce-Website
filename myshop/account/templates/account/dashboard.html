@@ -22,9 +22,9 @@
         <h1>Dashboard</h1>
             <p>Welcome to your dashboard <span class="text-success">{{ request.user.username}}</span>!</p>
             <p>last login: {{request.user.last_login}}</p>
-
-            <!-- <p> address: {{request.user.profile.address}} </p>
-            <img src="{{ request.user.profile.photo }}" width="200px" height="200px" alt=""> -->
+              {% comment %} {{ profile.city }} {% endcomment %}
+             {% comment %} <p> address: {{request.user.profile.address}} </p> {% endcomment %}
+            {% comment %} <img src="{{ profile.photo.url }}" width="100px" height="100px" alt=""> {% endcomment %}
 
          </div>
       </div>
