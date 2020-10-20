@@ -11,7 +11,7 @@ urlpatterns = [
     path('picture_x', views.picture, name='picture'),
     path('contact', views.contact, name='contact'),
     path('checkout', views.checkout, name='checkout'),
-    path('cart', views.cart, name='cart'),
+    
     path('categorie', views.categorie, name='categorie'),
     path('search', views.post_search, name='post_search'),
     path('store', views.product_list, name='product_list'),

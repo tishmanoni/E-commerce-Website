@@ -49,12 +49,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'django_countries',
-    'paystack',
     'social_django',
     'django_extensions',
     'taggit',
     'django.contrib.postgres',
     'currencies',
+    'paystack',
+    'tawkto',
     
     
     
@@ -77,7 +78,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    
+
 ]
 
 ROOT_URLCONF = 'myshop.urls'
@@ -224,3 +225,8 @@ OPENEXCHANGERATES_APP_ID = "aaa7cca31d214c8fb05faa97ecc52297"
 
 DEFAULT_CURRENCY = 'NGN'
 
+# PAYSTACK_PUBLIC_KEY='sk_live_64fbaab28d0dbe0d4658a3f36f7a76c0d242ff52'
+# PAYSTACK_SECRET_KEY='pk_live_38a49aeb965b4b408380bb775e6ecf83de808e89'
+TAWKTO_ID_SITE = '5f8d61defd4ff5477ea706eb'
+TAWKTO_API_KEY = '7f6ae4039e325bf900ecd0b9edfd9a4b50bd362a'
+# TAWKTO_IS_SECURE = True

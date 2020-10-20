@@ -10,7 +10,15 @@
 <br>
   <div class="container">
     <div class="row justify-content-center " style="margin-top:120px">
-      <div class="col-lg-6 col-md-12 col-sm-12 col-12 mb-4">
+      
+          <div class="col-xl-4 mb-3">
+            <div class="card bg-light p-3">
+            <h4>All orders are processed in NGN. WHILE THE CONTENT OF YOUR CART IS CUREENTLY <span class="text-warning"> {{request.session.currency}},</span>  YOU WILL CHECKOUT USING NGN AT THE MOST CURRENT EXCHANGE RATE </h4>
+          </div>
+          </div>
+       
+
+      <div class="col-lg-6 col-md-12 col-sm-12 col-12 mb-4 col-xl-8">
         <div class="card bg-light"> 
           <div class="card-body">
   
@@ -43,24 +51,20 @@
     
             <form method="post">
               {{ form|crispy}}
-              <p><input type="submit" class="btn btn-success" value="Place order"></p>
+              <p><input type="submit" class="btn btn-dark btn-lg" value="Continue Checkout "  ></p>
               {% csrf_token %}
             </form>
+            <!-- <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-lock-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.5 9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V9z"/>
+              <path fill-rule="evenodd" d="M4.5 4a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+            </svg> -->
 
-    </div>
+          </div>
         </div>
       </div>
 
 
-      <div class="row">
-
-        <div class="col-md-6">
-
-          <h4>All orders are processed in NGN. WHILE THE CONTENT OF YOUR CART IS CUREENTLY <span class="text-success"> {{request.session.currency}},</span>  YOU WILL CHECKOUT USING NGN AT THE MOST CURRENT EXCHANGE RATE </h4>
-
-        </div>
-
-      </div>
+   
   
     </div>
   </div>

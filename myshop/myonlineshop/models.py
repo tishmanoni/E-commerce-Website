@@ -54,7 +54,7 @@ class Product (models.Model):
     sale = models.BooleanField(default=False, verbose_name='pending payments')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    tags = TaggableManager()
+   
     size_cloth = models.BooleanField(default=True)
     size_trouser = models.BooleanField(default=True)
     
@@ -92,6 +92,13 @@ class Review(models.Model):
 
     def __str__(self):
         return f'Comment by user \n {self.body}'
+
+
+class Contact(models.Model):
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    subject = models.CharField(max_length=200)
+    message = models.TextField()
 
 
 

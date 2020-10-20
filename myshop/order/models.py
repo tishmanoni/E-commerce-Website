@@ -19,9 +19,9 @@ from django.utils.translation import gettext_lazy as _
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     address = models.CharField(_('address'), max_length=250)
-    postal_code = models.CharField(_('postal_code'),max_length=20)
+    postal_code = models.CharField(_('Postal code'),max_length=20)
     city = models.CharField(_('city'),max_length=100)
-    country = CountryField()
+    country = CountryField(blank_label='(select country)')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)
@@ -73,7 +73,7 @@ class OrderItem(models.Model):
         return self.price * self.quantity
 
     def get_absolute_url(self):
-        return reverse('orders:order_item',args=[self.quantity, self.order_id,
-                                self.user_id,
+        return reverse('orders:order_item',args=[self.product_id, self.quantity, self.order_id,
+                                self.user_id
                                 ])
 

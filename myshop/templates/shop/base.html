@@ -1,4 +1,7 @@
 {% load currency %}
+{% load paystack %}
+{% load tawkto_tags %}
+{% load static %}
 {% currency_context %}
 <!DOCTYPE html>
 <html lang="en">
@@ -31,19 +34,27 @@
 	<link rel="stylesheet" href="http://localhost/external-css/css/hover.css" rel="stylesheet" media="all">>
 	{% comment %} <link rel="stylesheet" href="http://localhost/external-css/css/message.css"> {% endcomment %}
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
-
+	
+	
 	<!--[if lt IE 9]>
 	  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 	  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 
+	
+
 </head>
 <body>
+
+
 	<!-- Page Preloder -->
 	<div id="preloder">
 		<div class="loader"></div>
 	</div>
+
+
 	
 	<!-- Header section -->
 	
@@ -52,10 +63,10 @@
 			<!-- logo -->
 			<div class="site-logo">
 				<!-- <a href="/home">
-				<img src="http://localhost/external-css/img/mylogo1.png" alt="logo" width="140px" style="margin-top:6px;">
+				<img src="http://localhost/external-css/img/logo.png" alt="logo">
 				</a> -->
 
-				<!-- <a href="">TISHMAN</a> -->
+				<h3><a href="" style="color:rgb(255,193,7); padding-left:-8px;">TISHR</a></h3>
 			</div>
 			<!-- responsive -->
 			<div class="nav-switch">
@@ -79,8 +90,8 @@
 					</span>
 				</a>
 				<a href="/search" class="search"><img src="http://localhost/external-css/img/icons/search.png" alt=""></a>
-				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-					CURRENCIES
+				<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">
+					<img src="http://localhost/external-css/img/icons/money1.png" alt="">
 				  </button>
 
 				  <!-- <form id="currency_switcher" method="POST" action="{% url 'myonlineshop:selectcurrency' %}">
@@ -154,10 +165,17 @@
 	
 
 
+	
+
+
 
     {% block content %}
     {% endblock %}
 
+
+	
+
+	
 
   
 	<!-- Footer top section -->	
@@ -170,11 +188,14 @@
 						{% comment %} <img src="http://localhost/external-css/img/mylogo2.png" class="footer-logo" width="166px" height="25px" style="padding-bottom:5px;" alt=""> {% endcomment %}
 						{% comment %} <p>Donec vitae purus nunc. Morbi faucibus erat sit amet congue mattis. Nullam fringilla faucibus urna, id dapibus erat iaculis ut. Integer ac sem.</p> {% endcomment %}
 						<div class="cards">
+							<center>
 							<img src="http://localhost/external-css/img/cards/5.png" alt="">
 							<img src="http://localhost/external-css/img/cards/4.png" alt="">
 							<img src="http://localhost/external-css/img/cards/3.png" alt="">
 							<img src="http://localhost/external-css/img/cards/2.png" alt="">
 							<img src="http://localhost/external-css/img/cards/1.png" alt="">
+							
+						</center>
 						</div>
 					</div>
 				</div>
@@ -187,7 +208,8 @@
 							<li><a href="#">Bloggers</a></li>
 							<li><a href="#">Support</a></li>
 							<li><a href="#">Terms of Use</a></li>
-							<li><a href="#">Press</a></li>
+							{% tawkto_script user_name=request.user user_email=request.user.email %}
+							
 						</ul>
 					</div>
 				</div>
@@ -198,7 +220,6 @@
 							<li><a href="#">About Us</a></li>
 							<li><a href="#">Track Orders</a></li>
 							<li><a href="#">Returns</a></li>
-							<li><a href="#">Jobs</a></li>
 							<li><a href="#">Shipping</a></li>
 							<li><a href="#">Blog</a></li>
 						</ul>
@@ -231,6 +252,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		</div>
 
  </footer>
+ 
 	
 <!-- modal -->
 <div class="modal fade" id="myModal">
@@ -288,7 +310,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 <script src="http://localhost/external-css/js/sly.min.js"></script>
 <script src="http://localhost/external-css/js/jquery.nicescroll.min.js"></script>
 <script src="http://localhost/external-css/js/main.js"></script>
-<script src="http://localhost/external-css/js/myjs.js"></script>
+<!-- <script src="http://localhost/external-css/js/myjs.js"></script> -->
 
 </body>
 </html>

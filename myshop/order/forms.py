@@ -7,6 +7,7 @@ class OrderCreateForm(forms.ModelForm):
         model = Order
         fields = [ 'address',
                   'postal_code', 'city', 'country']
+        
 
 
 

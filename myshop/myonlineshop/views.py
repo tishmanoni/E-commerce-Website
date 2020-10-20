@@ -2,15 +2,21 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
-from .models import Category, Product, Review
+from .models import Category, Product, Review, Contact
 from cart.forms import CartAddProductForm
 from django.contrib.auth.decorators import login_required
-
-from .forms import ReviewForm, SearchForm
+from cart.cart import Cart
+from .forms import ReviewForm, SearchForm, ContactForm
 from django.contrib.postgres.search import SearchVector
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-
+from django.urls import reverse
+from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404
+from order.models import OrderItem, Order
+from decimal import Decimal
+from django.core.mail import send_mail
+from django.contrib.auth.models import User
 
 from django.core.paginator import Paginator, EmptyPage,\
                                   PageNotAnInteger
@@ -49,11 +55,39 @@ def selectcurrency(request):
 
 def contact(request):
     categories = Category.objects.all()
-    return render(request, 'shop/product/contact.html', {'categories':categories})
+    name=''
+    email=''
+    comment=''
+    form= ContactForm(request.POST or None)
+    if form.is_valid():
+        name= form.cleaned_data.get("name")
+        email= form.cleaned_data.get("email")
+        comment=form.cleaned_data.get("comment")
+
+        if request.user.is_authenticated:
+            subject= str(request.user) + "'s Comment"
+        else:
+            subject= "A Visitor's Comment"
 
 
-def cart(request):
-    return render(request, 'cart.html', {})
+        comment= name + " with the email, " + email + ", sent the following message:\n\n" + comment;
+        send_mail(subject, comment, email, ['info@tishman.com.ng'])
+
+
+        context= {'form': form, 'categories':categories}
+        messages.success(request, "Your message has been sent. Thank you")
+        return render(request, 'shop/product/contact.html', context)
+
+    else:
+        form = ContactForm()
+        context= {'form': form, 'categories':categories }
+        return render(request, 'shop/product/contact.html', context)
+
+
+    # return render(request, 'shop/product/contact.html', {'categories':categories, 'message_form':message_form})
+
+
+
 
 def checkout(request):
     return render(request, 'checkout.html', {})
@@ -84,7 +118,7 @@ def product_list (request, category_slug=None):
     categories = Category.objects.all()
     my_products = Product.objects.filter(available=True)
     # my_products = Product.objects.all()
-    paginator = Paginator(my_products, 6) # 3 posts in each page
+    paginator = Paginator(my_products, 3) # 3 posts in each page
     page = request.GET.get('page')
     try:
         products = paginator.page(page)

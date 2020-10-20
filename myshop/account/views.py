@@ -11,6 +11,8 @@ from .forms import LoginForm, UserRegistrationForm, \
 from .models import Profile
 from django.contrib import messages
 from order.models import OrderItem, Order
+from myonlineshop.models import Product, Category
+
 
 
 
@@ -41,11 +43,13 @@ def dashboard(request):
     messages.success(request, 'Succesfully Logged in')
     current_user = request.user  # Access User Session information
     profile = Profile.objects.get(user_id=current_user.id)
-    return render(request,'account/dashboard.html',{'section': 'dashboard', 'profile':profile})
+    categories = Category.objects.all()
+    return render(request,'account/dashboard.html',{'section': 'dashboard', 'profile':profile, 'categories':categories})
 
 
 
 def register(request):
+    categories = Category.objects.all()
     if request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
         if user_form.is_valid():
@@ -61,12 +65,13 @@ def register(request):
 
             return render(request,
                           'account/register_done.html',
-                          {'new_user': new_user})
+                          {'new_user': new_user, 'categories':categories})
     else:
         user_form = UserRegistrationForm()
+        categories = Category.objects.all()
     return render(request,
                   'account/register.html',
-                  {'user_form': user_form})
+                  {'user_form': user_form, 'categories':categories})
 
 from .forms import LoginForm, UserRegistrationForm, \
                    UserEditForm, ProfileEditForm

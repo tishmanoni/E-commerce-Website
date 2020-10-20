@@ -13,24 +13,30 @@
     <div id="accordion">
 
     
-        
+        {% if filter %}
         
         {% for order in filter  %}
       <div class="card mb-4">
         <div class="card-header">
           <a class="card-link " data-toggle="collapse" href="#collapseOne">
-            <h2><a href="{{ order.get_absolute_url }}"> {{ order.product }} </a></h2>
+            <h2 class="text-success"><a href="{{ order.get_absolute_url }}"> {{ order.product }} </a></h2>
           </a>
         </div>
         <div id="collapseOne" class="collapse show" data-parent="#accordion">
           <div class="card-body">
+        <p>Size: {{order.size_cloth}}</p>
             <p>Price: {{order.price|currency:request.session.currency }} {{ request.session.currency }}</p>
             <p>Quantity: {{order.quantity}}</p>
-            <p>Size: {{order.size_cloth}}</p>
+            
           </div>
         </div>
       </div>
       {% endfor %}
+
+        {% else %}
+        No orders currently
+
+      {% endif %}
 
 
      

@@ -71,16 +71,16 @@ def order_create(request):
                                             price=item['price'],
                                             quantity=item['quantity'],
                                             size_cloth=item['size_cloth'])
-            # clear the cart
-            cart.clear()
-            
+  
             # launch asynchronous task
-            order_created(order.id)
+            #order_created(order.id)
             # return render(request, 'orders/order/created.html', locals())
             #set the order in the session
             request.session['order_id'] = order.id
+            # clear the cart
+            cart.clear()
             # redirect for payment
-            return redirect(reverse('payment:pay'))
+            return redirect(reverse('paystack:payment'))
         else:
             order_created.delay(order.id)
             return render(request,
@@ -121,9 +121,9 @@ def admin_order_pdf(request, order_id):
 
 
 @login_required
-def my_order(request, quantity, order_id, user_id):
+def my_order(request, product_id, quantity, order_id, user_id):
     # myorder = get_object_or_404(Order, id=id, user_id=user_id )
-    order_detail = get_object_or_404(OrderItem, quantity=quantity ,order_id=order_id,  user_id=request.user )
+    order_detail = get_object_or_404(OrderItem, product=product_id, quantity=quantity ,order_id=order_id,  user_id=request.user)
     orders = Order.objects.all()
     order_item = OrderItem.objects.filter(user=user_id) 
 
@@ -133,4 +133,5 @@ def my_order(request, quantity, order_id, user_id):
 def all_orders(request):
     orders = OrderItem.objects.all()
     orders_filter = orders.filter(user=request.user)
-    return render(request, 'orders/order/allorders.html', {'orders':orders, 'filter':orders_filter} )
+    categories = Category.objects.all()
+    return render(request, 'orders/order/allorders.html', {'orders':orders, 'filter':orders_filter, 'categories':categories} )

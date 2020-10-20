@@ -21,7 +21,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('paystack/', include('paystack.urls', namespace='paystack')),
     path('currencies/', include('currencies.urls')),
+    
     path('cart/', include('cart.urls', namespace='cart')),
     path('orders/', include('order.urls', namespace='order')),
     path('account/', include('account.urls')),

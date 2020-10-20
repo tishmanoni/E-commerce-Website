@@ -9,14 +9,14 @@ from decimal import Decimal
 def my_payment(request):
     order_id = request.session.get('order_id')
     order = get_object_or_404(Order, id=order_id)
-    total_cost = order.get_total_cost() + Decimal(1200)
+    total_cost = order.get_total_cost() + Decimal(20)
 
-    if request.method == 'POST':
-        order.paid=True
-        order.save()
-        return redirect('payment:done')
-    else:
-        return render(request, 'payment/pay.html', {'total_cost':total_cost})
+    # if request.method == 'POST':
+    #     order.paid=True
+    #     order.save()
+    #     return redirect('payment:done')
+    # else:
+    return render(request, 'payment/pay.html', {'total_cost':total_cost})
 
 def payment_done(request):
     return render(request, 'payment/done.html')

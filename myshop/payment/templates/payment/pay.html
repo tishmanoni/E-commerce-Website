@@ -1,6 +1,6 @@
 {% extends 'shop/base.html' %}
-
 {% block content %}
+
 
 <div class="container" style="margin-top:120px; margin-bottom:60px;">
     <div class="row justify-content-center" style="margin-top:140px; margin-bottom:60px;">
@@ -26,16 +26,19 @@
                 <input type="text" class="form-control" id="last-name" />
             </div>
             <div class="form-submit">
-                <button type="submit" class="btn btn-success" onclick="payWithPaystack()"> Pay </button>
+                <button type="submit" class="btn btn-success" onclick="payWithPaystack()">Pay
+                    
             </div>
             </form>
         </div>
     </div>
   </div>
+</div>
+  
 
 
 </div>
-</div>
+
 <script src="https://js.paystack.co/v1/inline.js"></script>
 
 {% endblock content %}
