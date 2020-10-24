@@ -13,7 +13,7 @@ from .models import Order, OrderItem
 from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from myonlineshop.models  import Product
+from myonlineshop.models  import Product, Category
 
 from django.urls import reverse
 import weasyprint
@@ -52,6 +52,7 @@ def order_create(request):
             data.postal_code = form.cleaned_data['postal_code']
             data.city = form.cleaned_data['city']
             data.country = form.cleaned_data['country']
+            data.state = form.cleaned_data['state']
             current_user = request.user
             data.user_id = current_user.id
             order = data
@@ -126,12 +127,13 @@ def my_order(request, product_id, quantity, order_id, user_id):
     order_detail = get_object_or_404(OrderItem, product=product_id, quantity=quantity ,order_id=order_id,  user_id=request.user)
     orders = Order.objects.all()
     order_item = OrderItem.objects.filter(user=user_id) 
+    categories = Category.objects.all()
 
-    return render(request, 'orders/order/myorders.html', {'orders':orders, 'order_detail':order_detail, 'order_item':order_item} )
+    return render(request, 'orders/order/myorders.html', {'orders':orders, 'order_detail':order_detail, 'order_item':order_item, 'categories':categories} )
 
 @login_required
 def all_orders(request):
-    orders = OrderItem.objects.all()
+    orders = OrderItem.objects.order_by('order')
     orders_filter = orders.filter(user=request.user)
     categories = Category.objects.all()
     return render(request, 'orders/order/allorders.html', {'orders':orders, 'filter':orders_filter, 'categories':categories} )

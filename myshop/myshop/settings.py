@@ -156,8 +156,9 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'RqOy8U5r1j735LDGMcRtm8nH' # Google Consumer 
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
+
+TIME_ZONE = 'Africa/Lagos'
 
 LANGUAGES = (
     ('en', 'English'),
@@ -176,7 +177,6 @@ LANGUAGES = (
 
 
 
-TIME_ZONE = 'UTC'
 
 USE_I18N = True
 

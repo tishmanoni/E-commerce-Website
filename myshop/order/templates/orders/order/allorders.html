@@ -27,6 +27,8 @@
         <p>Size: {{order.size_cloth}}</p>
             <p>Price: {{order.price|currency:request.session.currency }} {{ request.session.currency }}</p>
             <p>Quantity: {{order.quantity}}</p>
+            <p>Time ordered: {{ order.order.created }}</p>
+            <p>Payment: {% if order.order.paid %}Paid{% else %}Pending payment{% endif %}</p>
             
           </div>
         </div>

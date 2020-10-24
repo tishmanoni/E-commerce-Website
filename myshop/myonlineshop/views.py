@@ -148,6 +148,7 @@ def product_list (request, category_slug=None):
 from .recommender import Recommender
 def product_detail(request, id, slug):
     
+    categories = Category.objects.all()
     product = get_object_or_404(Product,
                                 id=id,
                                 slug=slug,
@@ -184,7 +185,7 @@ def product_detail(request, id, slug):
     else:
         comment_form = ReviewForm()
    
-    return render(request,'shop/product/detail.html', {'product': product, 'cart_product_form': cart_product_form, 'comments': comments,'new_comment': new_comment, 'comment_form': comment_form, 'recommended_products': recommended_products })  
+    return render(request,'shop/product/detail.html', {'product': product, 'cart_product_form': cart_product_form, 'comments': comments,'new_comment': new_comment, 'comment_form': comment_form, 'recommended_products': recommended_products , 'categories':categories})  
 
 # def addcomment(request, id):
 #     url = request.META.get('HTTP_REFERER') #get last url
