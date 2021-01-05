@@ -100,7 +100,7 @@
     </td>
     <td colspan="4"></td>
     <td class="num neg">
-      - {{ cart.get_discount|currency:request.session.currency }} {{ request.session.currency }} }}
+      - {{ cart.get_discount|currency:request.session.currency }} {{ request.session.currency }} 
       </td>
     </tr>
     {% endif %}
@@ -121,7 +121,7 @@
       {% csrf_token %}
     </form>
 
-
+      <br>
       <p class="text-right">
       <a href="{% url "myonlineshop:product_list" %}" class="btn btn-success">Continue shopping</a>
       {% if cart  %}

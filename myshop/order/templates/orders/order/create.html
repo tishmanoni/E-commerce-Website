@@ -30,9 +30,10 @@
                 {% for item in cart %}
                   <li>
                     {{ item.quantity }} x {{ item.product.name }} {{item.size_cloth}}
-                    <span>{{ item.total_price|currency:request.session.currency }} {{ request.session.currency }} </span>
+                    
                     
                   </li>
+                   <h4>Price: <span class="text-success">{{ item.total_price|currency:request.session.currency }} {{ request.session.currency }}</span> </h4>
                 {% endfor %}
                 <p>Shipping fee: ₦1200</p>
                  {% if cart.coupon %}

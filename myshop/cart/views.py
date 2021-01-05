@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from myonlineshop.models import Product
 from .cart import Cart
-from .forms import CartAddProductForm
+from .forms import CartAddProductForm, CartSizeAddProductForm
 from coupons.forms import CouponApplyForm
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -19,6 +19,7 @@ def cart_add(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
     form = CartAddProductForm(request.POST)
+    form_size = CartSizeAddProductForm(request.POST)
     
     
     if form.is_valid():
@@ -26,9 +27,18 @@ def cart_add(request, product_id):
         cart.add(product=product,
                  quantity=cd['quantity'],
                  override_quantity=cd['override'],
-                 size_cloth= cd['size_cloth']),
+                 size_cloth= cd['size_cloth'])
                  
-        messages.success(request, "Item added to Cart.")
+
+    # elif form_size.is_valid():
+    #     md = form_size.cleaned_data
+    #     cart.add(product=product,
+    #              quantity=md['quantity'],
+    #              override_quantity=md['override'],
+    #              size_cloth= md['size_cloth'])
+
+                 
+        
     
 
  
@@ -37,7 +47,8 @@ def cart_add(request, product_id):
                  
 
     
-    return HttpResponseRedirect(url)
+    # return HttpResponseRedirect(url)
+    return redirect('cart:cart_detail')
         
                  
     # return redirect('myonlineshop:product_detail')

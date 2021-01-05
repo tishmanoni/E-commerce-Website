@@ -1,9 +1,6 @@
-from .models import Review, Contact
+from .models import Review, Contact, MailList
 from django import forms
-class ReviewForm(forms.ModelForm):
-    class Meta:
-        model = Review
-        fields = ('name', 'email', 'body','rate')
+
 
 from django import forms
 class EmailPostForm(forms.Form):
@@ -14,6 +11,9 @@ class EmailPostForm(forms.Form):
 
 class SearchForm(forms.Form):
     query = forms.CharField(label='Search')
+
+class TrackOrderForm(forms.Form):
+    query = forms.CharField(label='Track Order(Input your oder Id)')
 
 SIZE_CHOICES = (
 
@@ -33,4 +33,9 @@ class ContactForm(forms.Form):
     email= forms.EmailField(max_length=500, label="Email")
     comment= forms.CharField(label='',widget=forms.Textarea(
                         attrs={'placeholder': 'Enter your comment here'}))
+    
+class MailForm(forms.ModelForm):
+    class Meta:
+        model = MailList
+        fields = ('email',)
     

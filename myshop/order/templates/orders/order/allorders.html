@@ -8,6 +8,19 @@
 
 <div class="container" style="margin-top: 120px; margin-bottom:60px">
     <h2 class="text-center mb-4">All orders</h2>
+       {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}  alert-dismissible fade-show" role="alert">
+            {{ message}}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+
+
+  
+    
+        </div>
+  {% endfor %}
+
+{% endif %}
  
  
     <div id="accordion">
@@ -18,18 +31,30 @@
         {% for order in filter  %}
       <div class="card mb-4">
         <div class="card-header">
-          <a class="card-link " data-toggle="collapse" href="#collapseOne">
-            <h2 class="text-success"><a href="{{ order.get_absolute_url }}"> {{ order.product }} </a></h2>
+          <a class="card-link" data-toggle="collapse" href="#collapseOne">
+            <h3 class="text-success"> Order Date: {{ order.order.created  }}</h3>
           </a>
         </div>
         <div id="collapseOne" class="collapse show" data-parent="#accordion">
           <div class="card-body">
-        <p>Size: {{order.size_cloth}}</p>
+
+            <h4 class="text-danger my-2">Click on Product to view Order in detail<h4>
+            <p>Order no: {{order.order_id}} </p>
+            <a href="{{ order.get_absolute_url }}"> 
+            <img src="{{order.product.image.url}}" class="img-fluid" width="60px" height="60px">
+            </a>
+            
+            <p>Product:<a href="{{ order.get_absolute_url }}">  {{ order.product }}</a></p>
+            <p>Size: {{order.size_cloth}}</p>
             <p>Price: {{order.price|currency:request.session.currency }} {{ request.session.currency }}</p>
             <p>Quantity: {{order.quantity}}</p>
-            <p>Time ordered: {{ order.order.created }}</p>
-            <p>Payment: {% if order.order.paid %}Paid{% else %}Pending payment{% endif %}</p>
             
+
+            <p>Payment: {% if order.order.paid %}Paid{% else %}Pending payment{% endif %}</p>
+            <p>Status: {{ order.order.status }}  </p>
+            <a href="/orders/delete/{{ order.order_id }}" onclick="return confirm('Do not cancel if you have made payment ! Are you sure you want to cancel?')" class="btn btn-danger"> Cancel Order</a>
+
+
           </div>
         </div>
       </div>

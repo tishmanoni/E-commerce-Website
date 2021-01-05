@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django_countries.fields import CountryField
+from phonenumber_field.modelfields import PhoneNumberField
 # Create your models here.
 from django.db import models
 from myonlineshop.models import Product
@@ -57,15 +58,26 @@ class Order(models.Model):
         ('Zamfara','Zamfara')
     )
 
+    STATUS = (
+        ('New', 'New'),
+        ('Accepted', 'Accepted'),
+        ('Preaparing', 'Preaparing'),
+        ('OnShipping', 'OnShipping'),
+        ('Completed', 'Completed'),
+        ('Canceled', 'Canceled'),
+    )
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     address = models.CharField(_('address'), max_length=250)
     postal_code = models.CharField(_('Postal code'),max_length=20)
     city = models.CharField(_('city'),max_length=100)
     state = models.CharField(choices=state_choice, default='Lagos', max_length=200 )
     country = CountryField(blank_label='(select country)')
+    phone_number = models.CharField(max_length=14)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)
+    status=models.CharField(max_length=10,choices=STATUS,default='New')
     coupon = models.ForeignKey(Coupon,
                                related_name='orders',
                                null=True,
@@ -83,6 +95,10 @@ class Order(models.Model):
         total_cost = sum(item.get_cost() for item in self.items.all())
         return total_cost - total_cost * \
             (self.discount / Decimal(100))
+    def get_total_cost_shipping(self):
+        total_cost = sum(item.get_cost() for item in self.items.all())
+        return total_cost - total_cost * (self.discount / Decimal(100)) + Decimal(1200)
+    
 
     # def get_absolute_url(self):
     #     return reverse('orders:my_order',args=[self.id,
@@ -90,9 +106,17 @@ class Order(models.Model):
     #                             ])
 class OrderItem(models.Model):
     Size_choice = (
+        
+        ("None","None"),
+        ('S', 'Small'),
         ('L', 'Large'),
-        ('S', 'small'),
-        ('XL', 'Extra Large') )
+        ('XL', 'Extra Large'),
+        ("39", "39"),
+        ("40", "40"),
+        ("41", "41"),
+        ("42", "42")
+        
+         )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     order = models.ForeignKey(Order,
                               related_name='items',
@@ -104,7 +128,7 @@ class OrderItem(models.Model):
 
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
-    size_cloth =models.CharField(max_length=200, choices=Size_choice, default='S')
+    size_cloth =models.CharField(max_length=200, choices=Size_choice, default='None')
 
     class Meta:
         unique_together = ('user', 'order', 'product', 'price', 'quantity')

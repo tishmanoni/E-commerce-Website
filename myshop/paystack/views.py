@@ -16,6 +16,8 @@ from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from order.models import OrderItem, Order
 from decimal import Decimal
+from django.http import HttpResponse, HttpResponseRedirect
+from order.views import payment_completed
 
 
 def payment(request):
@@ -28,7 +30,9 @@ def payment(request):
     orders = OrderItem.objects.all()
     orders_filter = orders.filter(user=request.user, order_id=order_id)
     order = get_object_or_404(Order, id=order_id)
+    total_cost_before_shipping = order.get_total_cost()
     total_cost = order.get_total_cost() + Decimal(1200)
+    # del_order = Order.objects.filter(id=order_id).delete()
     
 
     # if request.method == 'POST':
@@ -37,11 +41,26 @@ def payment(request):
     #     return redirect('payment:done')
     # else:
     # return render(request, 'payment/pay.html', )
-    return render(request, 'paystack/sample.html', {'total_cost':total_cost, 'filter':orders_filter, 'order_id':order_id})
+    return render(request, 'paystack/sample.html', {'total_cost':total_cost, 'filter':orders_filter, 'order_id':order_id, 'total_cost_before_shipping':total_cost_before_shipping})
+
+def delete(request, id):
+    person_pk = request.session.get('order_id')
+    current_user = request.user
+    Order.objects.filter(id=person_pk, user_id=current_user.id).delete()
+    # query = Order.objects.get(id=person_pk)
+    # query.delete()
+    messages.success(request, 'Order deleted, Continue Shopping')
+    return HttpResponseRedirect('/store')
+
+def all_orders(request):
+    orders = OrderItem.objects.order_by('order')
+    orders_filter = orders.filter(user=request.user)
+    return render(request, 'paystack/sample.html', {'filter':orders_filter})
 
 def success(request):
     order_id = request.session.get('order_id')
     order = get_object_or_404(Order, id=order_id)
+    payment_completed(order.id)
     return render(request, 'paystack/success-page.html', {'order':order})
 
 def verify_payment(request, order):

@@ -25,20 +25,31 @@
 
             {% for items in filter  %}
 
-            <p> Product: {{ items.product}}</p>
+
+             <img src="{{items.product.image.url}}" class="img-fluid" width="100px" height="100px">
+
+            <h4 class="mt-2 text-success"><span class="text-dark">Product:</span>  {{ items.product}}</h4>
             <P>Size: {{ items.size_cloth }} </P>
             <p>Quantity: {{ items.quantity}}</p>
-            <p>Price: {{items.price}} </p>
+            <p>Price: {{items.price }}</p>
+            <p>Address: {{items.order.address}} </p>
+            <p>Country: {{items.order.country.name}} </p>
+           
+            
             <hr>
 
             {% endfor %}
-
+            
+            <p>Total Price before shipping: {{total_cost_before_shipping}} </p>
             <p class="text-danger">Shipping fee:  ₦1200</p>
             <hr>           
             <p> Order total {{total_cost}} </p>
             
              {% paystack_button button_class="red" amount=total_cost  email=request.user.email %}
-
+              <br>
+             
+             <a href="/paystack/delete/{{ order.id }}" onclick="return confirm('Order will be Deleted ! Are you sure?')" class="btn btn-danger"> Cancel Order</a>
+             
            </div>
       </div>
   </div>

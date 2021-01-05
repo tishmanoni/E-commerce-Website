@@ -1,8 +1,9 @@
 {% load currency %}
 {% load paystack %}
 {% load tawkto_tags %}
+{% load crispy_forms_tags %}
 {% load static %}
-{% currency_context %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,7 +67,7 @@
 				<img src="http://localhost/external-css/img/logo.png" alt="logo">
 				</a> -->
 
-				<h3><a href="/home" style="color:rgb(255,193,7); padding-left:-8px;">TISHR</a></h3>
+				<h3><a href="/" style="color:rgb(255,193,7); padding-left:-8px;">TISHR</a></h3>
 			</div>
 			<!-- responsive -->
 			<div class="nav-switch">
@@ -89,12 +90,12 @@
 						{% endwith %}
 					</span>
 				</a>
-				<a href="/search" class="search"><img src="http://localhost/external-css/img/icons/search.png" alt=""></a>
-				<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">
+				<a href="/search" class="search"><img src="http://localhost/external-css/img/icons/search.png" alt=""></a>&nbsp;&nbsp;<br>
+				{% comment %} <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">
 					<img src="http://localhost/external-css/img/icons/money1.png" alt="">
-				  </button>
+				  </button> {% endcomment %}
 
-				  <!-- <form id="currency_switcher" method="POST" action="{% url 'myonlineshop:selectcurrency' %}">
+				  <form id="currency_switcher" method="POST" action="{% url 'myonlineshop:selectcurrency' %}" style="padding-top:8px;">
 					{% csrf_token %}
 					<select name="currency" onchange="submit()" class="custom-select custom-select-md">
 						{% for curr in CURRENCIES %}
@@ -109,7 +110,7 @@
 						<input type="submit" value="Set" />
 					</noscript>
 	
-				</form>  -->
+				</form> 
 
 				 
 
@@ -123,8 +124,8 @@
 			<!-- site menu -->
 
 			<ul class="main-menu">
-				<li><a href="/home">Home</a></li>
-				<li><a href="/store">Store</a></li>
+				<li><a href="/">Home</a></li>
+				<li><a href="/store">Collections</a></li>
 				<li class="dropdown"><a href="javascript:void(0)" class="dropbtn">Categories</a>
 				 <div class="dropdown-content">
 					<a href="{% url "myonlineshop:product_list" %}" style="color:black">All</a>
@@ -140,6 +141,7 @@
 				<div class="dropdown-content">
 					<a href="{% url "edit" %}" style="color:black">Edit Account</a>
 					<a href="{% url "orders:all_order" %}" style="color:black">Orders</a>
+					<a href="{% url "myonlineshop:track_order" %}" style="color:black">Track order</a>
 					
 					
 				</div>
@@ -182,30 +184,14 @@
 	<section class="footer-top-section home-footer">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-3 col-md-8 col-sm-12">
-					<div class="footer-widget about-widget">
-						
-						{% comment %} <img src="http://localhost/external-css/img/mylogo2.png" class="footer-logo" width="166px" height="25px" style="padding-bottom:5px;" alt=""> {% endcomment %}
-						{% comment %} <p>Donec vitae purus nunc. Morbi faucibus erat sit amet congue mattis. Nullam fringilla faucibus urna, id dapibus erat iaculis ut. Integer ac sem.</p> {% endcomment %}
-						<div class="cards">
-							<center>
-							<img src="http://localhost/external-css/img/cards/5.png" alt="">
-							<img src="http://localhost/external-css/img/cards/4.png" alt="">
-							<img src="http://localhost/external-css/img/cards/3.png" alt="">
-							<img src="http://localhost/external-css/img/cards/2.png" alt="">
-							<img src="http://localhost/external-css/img/cards/1.png" alt="">
-							
-						</center>
-						</div>
-					</div>
-				</div>
+				
 				
 				<div class="col-lg-3 col-md-4 col-sm-6">
 					<div class="footer-widget">
-						<h6 class="fw-title">Sitemap</h6>
+						<h6 class="fw-title">More info</h6>
 						<ul>
 							<li><a href="#">Partners</a></li>
-							<li><a href="#">Bloggers</a></li>
+							<li><a href="{% url "blog:blog_news" %}">Bloggers</a></li>
 							<li><a href="#">Support</a></li>
 							<li><a href="#">Terms of Use</a></li>
 							{% tawkto_script user_name=request.user user_email=request.user.email %}
@@ -221,7 +207,7 @@
 							<li><a href="#">Track Orders</a></li>
 							<li><a href="#">Returns</a></li>
 							<li><a href="#">Shipping</a></li>
-							<li><a href="#">Blog</a></li>
+							{% comment %} <li><a href="#">Blog</a></li> {% endcomment %}
 						</ul>
 					</div>
 				</div>
@@ -229,14 +215,33 @@
 					<div class="footer-widget">
 						<h6 class="fw-title">Contact</h6>
 						<div class="text-box">
-							<p>Tishman Ltd </p>
+							<p><span class="icon-footer"><img src="http://localhost/external-css/img/enterprise.png"></span> Tishman Ltd </p>
 							<p>5, arowolo street beach rd Agric, Ikorodu. </p>
 							<p>+234 8141 635443</p>
 							<p>info@tishman.com.ng</p>
 						</div>
 					</div>
 				</div>
-			</div>
+
+					<div class="col-lg-3 col-md-4 col-sm-6">
+					<div class="footer-widget">
+						<h6 class="fw-title">Stay Connected</h6>
+						<p class="text-center">Join our mail list to get exclusive offers</p>
+				
+				<form method="post" action="/mail">
+							
+
+		 <div id="div_id_email" class="form-group"> <label for="id_email" class=" requiredField" style="color:white;">
+                Email<span class="asteriskField">*</span> </label> <div class=""> <input type="email" name="email" maxlength="254" class="emailinput form-control" required id="id_email"> </div> </div>
+
+							{% csrf_token %}
+							<input type="submit" class="btn btn-danger" value="Join Newslatter">
+							
+						</form>
+					</div>
+				</div>
+
+			</div> 
 		</div>
 	</section>
 	<!-- Footer top section end -->	
@@ -265,7 +270,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 	</div>
 	
-	<!-- Modal body -->
+	{% comment %} <!-- Modal body -->
 		<div class="modal-body">
 			<form id="currency_switcher" method="POST" action="{% url 'myonlineshop:selectcurrency' %}">
 				{% csrf_token %}
@@ -291,7 +296,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	
 	</div>
 </div>
-</div>
+</div> {% endcomment %}
 
 	
 	<!-- Footer section end -->

@@ -6,7 +6,7 @@ class OrderCreateForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = [ 'address',
-                  'postal_code', 'city','state', 'country']
+                  'postal_code', 'city','state', 'country', 'phone_number']
         
         
 

@@ -14,10 +14,20 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from myonlineshop.models  import Product, Category
-
+from django.contrib import messages
 from django.urls import reverse
 import weasyprint
 from django.core.mail import send_mail
+from django.http import HttpResponse, HttpResponseRedirect
+from io import BytesIO
+# from celery import task
+import weasyprint
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.conf import settings
+from order.models import Order
+
+
 
 
 def order_created(order_id):
@@ -36,6 +46,33 @@ def order_created(order_id):
                           [order.user.email])
     return mail_sent
 
+
+def payment_completed(order_id):
+    """
+    Task to send an e-mail notification when an order is
+    successfully created.
+    """
+    order = Order.objects.get(id=order_id)
+    # create invoice e-mail
+    subject = f'My Shop - EE Invoice no. {order.id}'
+    message = 'Please, find attached the invoice for your recent purchase.'
+    email = EmailMessage(subject,
+                         message,
+                         'info@tishman.com.ng',
+                         [order.user.email])
+    # generate PDF
+    html = render_to_string('orders/order/pdf.html', {'order': order})
+    out = BytesIO()
+    stylesheets=[weasyprint.CSS(settings.STATIC_ROOT + 'css/pdf.css')]
+    weasyprint.HTML(string=html).write_pdf(out,
+                                          stylesheets=stylesheets)
+    # attach PDF file
+    email.attach(f'order_{order.id}.pdf',
+                 out.getvalue(),
+                 'application/pdf')
+    # send e-mail
+    email.send()
+
 @login_required
 def order_create(request):
     cart = Cart(request)
@@ -53,6 +90,7 @@ def order_create(request):
             data.city = form.cleaned_data['city']
             data.country = form.cleaned_data['country']
             data.state = form.cleaned_data['state']
+            data.phone_number = form.cleaned_data['phone_number']
             current_user = request.user
             data.user_id = current_user.id
             order = data
@@ -71,7 +109,8 @@ def order_create(request):
                                             product=item['product'],
                                             price=item['price'],
                                             quantity=item['quantity'],
-                                            size_cloth=item['size_cloth'])
+                                            size_cloth= item["size_cloth"]
+                                            )
   
             # launch asynchronous task
             #order_created(order.id)
@@ -83,7 +122,7 @@ def order_create(request):
             # redirect for payment
             return redirect(reverse('paystack:payment'))
         else:
-            order_created.delay(order.id)
+            order_created(order.id)
             return render(request,
                           'orders/order/created.html',
                           {'order': order})
@@ -137,3 +176,21 @@ def all_orders(request):
     orders_filter = orders.filter(user=request.user)
     categories = Category.objects.all()
     return render(request, 'orders/order/allorders.html', {'orders':orders, 'filter':orders_filter, 'categories':categories} )
+
+
+@login_required 
+def delete(request, id):
+    # person_pk = request.session.get('order_id')
+    current_user = request.user
+    Order.objects.filter(id=id, user_id=current_user.id).delete()
+    # query = Order.objects.get(id=person_pk)
+    # query.delete()
+    messages.success(request, 'Order canceled')
+    return HttpResponseRedirect('/orders/allorders')
+
+# @login_required(login_url='/login') # Check login
+# def user_deletecomment(request,id):
+#     current_user = request.user
+#     Comment.objects.filter(id=id, user_id=current_user.id).delete()
+#     messages.success(request, 'Comment deleted..')
+#     return HttpResponseRedirect('/user/comments')

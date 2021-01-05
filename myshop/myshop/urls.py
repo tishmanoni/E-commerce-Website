@@ -20,15 +20,19 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
+     path('currencies/', include('currencies.urls')),
     path('admin/', admin.site.urls),
 
     path('paystack/', include('paystack.urls', namespace='paystack')),
-    path('currencies/', include('currencies.urls')),
+   
     
     path('cart/', include('cart.urls', namespace='cart')),
+    path('blog/', include('blog.urls', namespace='blog')),
     path('orders/', include('order.urls', namespace='order')),
     path('account/', include('account.urls')),
+    
     path('payment/', include('payment.urls')),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
     path('social-auth/', include('social_django.urls', namespace='social')),
     path('coupons/', include('coupons.urls', namespace='coupons')),
     path('', include('myonlineshop.urls', namespace='myonlineshop')),

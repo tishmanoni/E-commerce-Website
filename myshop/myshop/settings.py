@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'order.apps.OrderConfig',
     'account.apps.AccountConfig',
     'payment',
+    'blog',
     'coupons.apps.CouponsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -56,6 +57,8 @@ INSTALLED_APPS = [
     'currencies',
     'paystack',
     'tawkto',
+    'phonenumber_field',
+    'ckeditor',
     
     
     
@@ -97,6 +100,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart',
                 'currencies.context_processors.currencies',
+               
                 # 'myonlineshop.context_processors.category',
                 
             ],
@@ -154,6 +158,9 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '399053652477-t9nrl6apjefq6cahehfc3m0evh7vop4s.a
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'RqOy8U5r1j735LDGMcRtm8nH' # Google Consumer Secret
 
 
+SOCIAL_AUTH_TWITTER_KEY = 'O3mnge5tFjAJzoLf6XIdOCRj4' # Twitter API Key
+SOCIAL_AUTH_TWITTER_SECRET = 'moyxjA9efxARarz1c80CK9KRTGDoKvPrUYANNIqKPp7pXKllWm' # Twitter API Secret
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 LANGUAGE_CODE = 'en-us'
@@ -175,7 +182,13 @@ LANGUAGES = (
     ('es', _('Spanish')),
 )
 
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_HTTPONLY = True 
 
+# SESSION_COOKIE_HTTPONLY = True 
+
+# SECURE_SSL_REDIRECT = True
 
 
 USE_I18N = True
@@ -197,6 +210,18 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
+
+CKEDITOR_UPLOAD_PATH = 'images/'
+CKEDITOR_IMAGE_BACKEND = "pillow"
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': None,
+    },
+}
 
 
 CART_SESSION_ID = 'cart'
@@ -223,7 +248,9 @@ REDIS_DB = 1
 OPENEXCHANGERATES_APP_ID = "aaa7cca31d214c8fb05faa97ecc52297"
 
 
-DEFAULT_CURRENCY = 'NGN'
+DEFAULT_CURRENCY = "NGN"
+
+PHONENUMBER_DB_FORMAT = 'INTERNATIONAL'
 
 # PAYSTACK_PUBLIC_KEY='sk_live_64fbaab28d0dbe0d4658a3f36f7a76c0d242ff52'
 # PAYSTACK_SECRET_KEY='pk_live_38a49aeb965b4b408380bb775e6ecf83de808e89'
